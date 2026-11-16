@@ -9,6 +9,10 @@ on:
       - "scripts/**"
       - ".github/workflows/build-iso.yml"
 
+concurrency:
+  group: aether-iso-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -20,6 +24,12 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+
+      - name: Check shell syntax
+        run: |
+          bash -n scripts/build-iso.sh
+          bash -n scripts/check-iso.sh
+          bash -n profile/profiledef.sh
 
       - name: Build with Arch Linux and archiso
         shell: bash
