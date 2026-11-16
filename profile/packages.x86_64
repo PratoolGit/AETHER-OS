@@ -1,0 +1,58 @@
+# AETHER OS Alpha 0.1 — deliberately small starting package set.
+# Keep optional developer and Windows-compatibility stacks out of the base
+# image; users can add them when needed.
+
+# Core and boot
+base
+linux
+linux-firmware
+amd-ucode
+mkinitcpio
+sudo
+
+# Network and Bluetooth
+networkmanager
+iwd
+wireless-regdb
+bluez
+bluez-utils
+
+# AMD graphics and desktop
+mesa
+vulkan-radeon
+xfce4
+xfce4-terminal
+thunar
+xorg-server
+xorg-xinit
+xf86-input-libinput
+lightdm
+lightdm-gtk-greeter
+polkit
+polkit-gnome
+
+# Audio
+pipewire
+pipewire-alsa
+pipewire-pulse
+wireplumber
+pavucontrol
+
+# Desktop integration
+network-manager-applet
+xdg-user-dirs
+xdg-utils
+xdg-desktop-portal
+xdg-desktop-portal-gtk
+gvfs
+gvfs-mtp
+tumbler
+file-roller
+udisks2
+
+# Basic tools
+git
+curl
+wget
+nano
+flatpak
