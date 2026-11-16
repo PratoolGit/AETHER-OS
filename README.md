@@ -42,6 +42,20 @@ On an Arch Linux build machine with archiso installed, run:
 
 The ISO and checksum are written to the out/ directory.
 
+## Friendly commands
+
+In a terminal, use the AETHER helper:
+
+- aether help
+- aether update
+- aether install PACKAGE
+- aether remove PACKAGE
+- aether search TERM
+- aether info
+- aether network
+
+Familiar aliases are also provided: cls, dir, copy, move, del, ipconfig and tasklist. These are convenience shortcuts; standard Linux commands remain available.
+
 ## Build with GitHub Actions
 
 Open the repository's Actions tab and run **Build AETHER OS ISO**, or push a change to the ISO profile. A successful run uploads the ISO and SHA-256 checksum as a temporary workflow artifact.
