@@ -13,7 +13,7 @@ sudo
 
 # Network and Bluetooth
 networkmanager
-iwd
+wpa_supplicant
 wireless-regdb
 bluez
 bluez-utils
@@ -49,8 +49,6 @@ gvfs
 gvfs-mtp
 tumbler
 file-roller
-udisks2
-
 # Basic tools
 git
 curl
