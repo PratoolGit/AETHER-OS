@@ -17,7 +17,7 @@ The first alpha is a live-session prototype. It is not an installer and must not
 - Use a dedicated USB drive; a 32 GB or larger USB 3.x drive is recommended for practical persistence testing.
 - Writing an ISO to a USB drive erases that USB drive. Confirm the selected device by model and capacity before writing.
 - Do not select the Windows internal SSD.
-- Do not enable automatic mounting of internal disks.
+- Do not enable automatic mounting of internal disks. The initial image omits UDisks2, so desktop volume mounting is intentionally unavailable until disk-protection rules are implemented.
 - Do not create swap, persistence, logs or application data on the Windows disk.
 - Keep Secure Boot disabled for the initial prototype unless the image has been signed and verified.
 - The first image does not yet provide persistent live storage; persistence is a later milestone. The live session automatically creates a temporary aether account and logs into XFCE; do not use it as a secure personal account.
@@ -42,7 +42,7 @@ The 600–800 MB idle RAM target is not considered achieved until measured on th
 - Touchpad, gestures, keyboard, audio and microphone.
 - Suspend and resume.
 - External display and USB peripherals.
-- Verify that internal storage remains unmounted and is not written to.
+- Verify with lsblk that internal storage remains unmounted and inspect mount output for any internal-disk mount. The absence of a GUI mount option is not a substitute for a full block-device write-protection test.
 
 ## Reporting
 
