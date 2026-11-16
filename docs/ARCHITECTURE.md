@@ -1,0 +1,33 @@
+# AETHER OS Architecture
+
+## Foundation
+
+AETHER OS is a customized Arch Linux distribution, not a new kernel. It uses the Linux kernel and existing Linux drivers, filesystems, networking, audio and process-management facilities.
+
+## Initial layers
+
+1. **Boot and live image:** Archiso builds a reproducible x86_64 live image. The first prototype uses UEFI systemd-boot because it is directly supported by Archiso. Limine remains the intended bootloader; its ISO integration is a separate engineering task and must be tested before switching.
+2. **Base system:** Arch Linux packages, systemd, pacman and NetworkManager.
+3. **Desktop baseline:** XFCE is a low-overhead benchmark baseline, not a final design lock-in.
+4. **AETHER experience:** custom dock, panel, launcher, settings, appearance and performance tools will be developed as separate components.
+5. **Optional compatibility:** Wine, Bottles, Proton, Flatpak applications and developer toolchains are installed on demand.
+
+## Memory budget
+
+The 600–800 MB idle target applies to a defined, clean desktop session after startup settles. It must be measured on the reference ASUS laptop and in a repeatable virtual-machine configuration. Memory usage depends on kernel, firmware, desktop, drivers, display resolution and background services. No target is guaranteed before measurement.
+
+## Windows and development compatibility
+
+- Linux development tools run natively.
+- Windows applications may run through Wine or Bottles; compatibility varies by application.
+- Games may use Steam/Proton; anti-cheat and DRM support varies.
+- Keep large compatibility stacks optional to protect the base memory and ISO footprint.
+- Provide friendly aliases and guided graphical workflows without replacing standard shell commands.
+
+## Disk safety
+
+The live environment must not automatically mount internal disks. Persistence must be explicitly selected on removable media. Installer work is blocked until device-identification, confirmation and destructive-operation safeguards have been tested. No automatic Windows partition resizing or bootloader changes are allowed.
+
+## Build
+
+Use scripts/build-iso.sh on Arch Linux with archiso installed, or run the GitHub Actions workflow. The workflow stores the ISO and SHA-256 checksum as a build artifact.
