@@ -20,7 +20,7 @@ The first alpha is a live-session prototype. It is not an installer and must not
 - Do not enable automatic mounting of internal disks.
 - Do not create swap, persistence, logs or application data on the Windows disk.
 - Keep Secure Boot disabled for the initial prototype unless the image has been signed and verified.
-- The first image does not yet provide persistent live storage; persistence is a later milestone.
+- The first image does not yet provide persistent live storage; persistence is a later milestone. The live session automatically creates a temporary aether account and logs into XFCE; do not use it as a secure personal account.
 
 ## Memory benchmark
 
