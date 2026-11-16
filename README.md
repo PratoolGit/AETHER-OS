@@ -2,16 +2,27 @@
 
 A lightweight, highly customizable Linux distribution focused on developer productivity and broad hardware support.
 
-> **Status:** Early alpha — bootable image and hardware compatibility are under development.
+> **Status:** Early alpha — the first bootable image is being assembled and has not yet passed CI or hardware testing.
 
 ## Project goals
 
-- Target **600–800 MB idle RAM** on the reference laptop, measured under a documented test profile. This is a goal, not a guaranteed result.
+- Target **600–800 MB idle RAM** on the reference laptop, measured under a documented test profile. This is a goal, not a guarantee.
 - A highly configurable desktop: dock, panel, launcher, themes, window layouts, gestures and appearance controls.
 - Linux development support with optional runtimes and tools installed on demand.
-- Windows application compatibility through optional Wine, Bottles and Steam/Proton components.
-- A beginner-friendly command experience with familiar aliases and guided system tools, without hiding standard Linux commands.
+- Windows application compatibility through optional Wine/Bottles/Proton components.
+- A beginner-friendly command experience with familiar aliases and guided system tools, while retaining standard Linux commands.
 - A persistent live USB workflow that does not automatically mount or modify internal Windows disks.
+
+## Current alpha
+
+- Archiso-based x86_64 image profile.
+- XFCE desktop baseline selected for low-overhead benchmarking.
+- AMD graphics, Linux firmware, NetworkManager, Bluetooth and PipeWire.
+- LightDM live session with a temporary AETHER user.
+- Friendly AETHER command helper and familiar shell aliases.
+- GitHub Actions build workflow.
+
+The initial prototype currently uses UEFI systemd-boot because it is directly supported by Archiso. **Limine remains the intended bootloader** and requires a separately tested ISO integration step before the bootloader choice is finalized.
 
 ## Reference hardware
 
@@ -21,14 +32,26 @@ A lightweight, highly customizable Linux distribution focused on developer produ
 - AMD integrated graphics
 - MediaTek MT7902 Wi-Fi / Bluetooth (hardware validation required)
 
-## Build status
+## Build locally
 
-The first milestone is a reproducible Archiso-based live image. The build will run in CI and publish an ISO with SHA-256 checksums only after the build and safety checks pass.
+On an Arch Linux build machine with archiso installed, run:
+
+    sudo pacman -S archiso
+    bash scripts/build-iso.sh
+    bash scripts/check-iso.sh
+
+The ISO and checksum are written to the out/ directory.
+
+## Build with GitHub Actions
+
+Open the repository's Actions tab and run **Build AETHER OS ISO**, or push a change to the ISO profile. A successful run uploads the ISO and SHA-256 checksum as a temporary workflow artifact.
 
 ## Safety
 
-AETHER OS is experimental. Test from a USB drive first. Do not install it to an internal disk until the installer and disk-selection safeguards have been independently validated. No software can promise absolute protection against every firmware, hardware or user error.
+AETHER OS is experimental. Test from a USB drive first. Do not install it to an internal disk until the installer and disk-selection safeguards have been independently validated. The current alpha is a live-session prototype, not an installer. No software can promise absolute protection against every firmware, hardware or user error.
 
-## Development
+## Project documents
 
-See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+- [Architecture](docs/ARCHITECTURE.md)
+- [Roadmap](docs/ROADMAP.md)
+- [USB and hardware testing](docs/TESTING.md)
