@@ -24,8 +24,10 @@ if (( EUID != 0 )); then
     echo "Run this script as root or install sudo." >&2
     exit 1
   fi
-  exec sudo env AETHER_WORK_DIR="$WORK_DIR" AETHER_OUT_DIR="$OUT_DIR" \
+  sudo env AETHER_WORK_DIR="$WORK_DIR" AETHER_OUT_DIR="$OUT_DIR" \
     mkarchiso -v -w "$WORK_DIR" -o "$OUT_DIR" "$PROFILE_DIR"
+  sudo chown -R "$(id -u):$(id -g)" "$WORK_DIR" "$OUT_DIR"
+  exit 0
 fi
 
-exec mkarchiso -v -w "$WORK_DIR" -o "$OUT_DIR" "$PROFILE_DIR"
+mkarchiso -v -w "$WORK_DIR" -o "$OUT_DIR" "$PROFILE_DIR"
