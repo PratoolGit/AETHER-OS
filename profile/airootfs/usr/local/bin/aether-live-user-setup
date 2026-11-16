@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+if ! id aether >/dev/null 2>&1; then
+  useradd --create-home --user-group --groups wheel,audio,video,storage,optical,lp --shell /bin/bash aether
+fi
+
+# This account exists only in the live image and is automatically logged in.
+# The live environment is not intended to be used as a persistent secure account.
+passwd --delete aether >/dev/null
+install -d -o aether -g aether -m 0755 /home/aether
