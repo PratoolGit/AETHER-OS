@@ -26,7 +26,7 @@ The 600–800 MB idle target applies to a defined, clean desktop session after s
 
 ## Disk safety
 
-The live environment must not automatically mount internal disks. Persistence must be explicitly selected on removable media. Installer work is blocked until device-identification, confirmation and destructive-operation safeguards have been tested. No automatic Windows partition resizing or bootloader changes are allowed.
+The live environment must not automatically mount internal disks. The first alpha deliberately omits UDisks2 so the file manager cannot casually mount internal Windows partitions; this is a temporary safety trade-off. Persistence must be explicitly selected on removable media. Installer work is blocked until device-identification, confirmation and destructive-operation safeguards have been tested. No automatic Windows partition resizing or bootloader changes are allowed.
 
 ## Build
 
