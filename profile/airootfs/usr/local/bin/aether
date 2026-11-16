@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+usage() {
+  cat <<'HELP'
+AETHER OS command helper
+
+Usage:
+  aether help                 Show this help
+  aether update               Update installed packages
+  aether install PACKAGE      Install a package
+  aether remove PACKAGE       Remove a package
+  aether search TERM          Search available packages
+  aether info                 Show basic system information
+  aether network              Show network interfaces and addresses
+
+You can still use normal Linux commands and pacman directly.
+HELP
+}
+
+need_sudo() {
+  if [[ "$EUID" -eq 0 ]]; then return 0; fi
+  if command -v sudo >/dev/null 2>&1; then return 0; fi
+  echo "sudo is not available." >&2
+  exit 1
+}
+
+case "${1:-help}" in
+  help|-h|--help)
+    usage
+    ;;
+  update)
+    need_sudo
+    sudo pacman -Syu
+    ;;
+  install)
+    [[ -n "${2:-}" ]] || { echo "Usage: aether install PACKAGE" >&2; exit 2; }
+    need_sudo
+    sudo pacman -S --needed "$2"
+    ;;
+  remove)
+    [[ -n "${2:-}" ]] || { echo "Usage: aether remove PACKAGE" >&2; exit 2; }
+    need_sudo
+    sudo pacman -Rns "$2"
+    ;;
+  search)
+    [[ -n "${2:-}" ]] || { echo "Usage: aether search TERM" >&2; exit 2; }
+    pacman -Ss "$2"
+    ;;
+  info)
+    printf 'AETHER OS\n'
+    printf 'Kernel: '
+    uname -r
+    printf 'Architecture: '
+    uname -m
+    ;;
+  network)
+    ip -brief address
+    ;;
+  *)
+    echo "Unknown command: $1" >&2
+    usage
+    exit 2
+    ;;
+esac
