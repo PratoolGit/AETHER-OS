@@ -4,12 +4,19 @@ set -Eeuo pipefail
 # LightDM's autologin PAM stack requires membership in the autologin group.
 getent group autologin >/dev/null || groupadd --system autologin
 
+# Add only groups that exist in this Arch base image.
+live_groups=()
+for group in wheel audio video storage optical lp autologin; do
+  if getent group "$group" >/dev/null; then
+    live_groups+=("$group")
+  fi
+done
+group_list="$(IFS=,; printf '%s' "${live_groups[*]}")"
+
 if ! id aether >/dev/null 2>&1; then
-  useradd --create-home --user-group \
-    --groups wheel,audio,video,storage,optical,lp,autologin \
-    --shell /bin/bash aether
+  useradd --create-home --user-group --groups "$group_list" --shell /bin/bash aether
 else
-  usermod --append --groups wheel,audio,video,storage,optical,lp,autologin aether
+  usermod --append --groups "$group_list" aether
 fi
 
 install -d -o aether -g aether -m 0755 /home/aether
