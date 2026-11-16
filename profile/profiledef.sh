@@ -10,6 +10,7 @@ iso_publisher="AETHER OS Project"
 iso_application="AETHER OS Live Environment"
 iso_version="0.1.0-alpha-20261116"
 install_dir="aether"
+pacman_conf="pacman.conf"
 
 buildmodes=('iso')
 bootmodes=('uefi.systemd-boot')
