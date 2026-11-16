@@ -13,3 +13,10 @@ install_dir="aether"
 
 buildmodes=('iso')
 bootmodes=('uefi.systemd-boot')
+
+# Preserve executable permissions and sudoers safety for the live-session helpers.
+file_permissions=(
+  ["/etc/sudoers.d/10-aether-live"]="0:0:440"
+  ["/usr/local/bin/aether-live-user-setup"]="0:0:755"
+  ["/usr/local/bin/aether"]="0:0:755"
+)
