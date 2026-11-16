@@ -8,6 +8,7 @@ linux
 linux-firmware
 amd-ucode
 mkinitcpio
+mkinitcpio-archiso
 sudo
 
 # Network and Bluetooth
