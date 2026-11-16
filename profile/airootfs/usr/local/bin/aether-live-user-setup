@@ -1,11 +1,25 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+# LightDM's autologin PAM stack requires membership in the autologin group.
+getent group autologin >/dev/null || groupadd --system autologin
+
 if ! id aether >/dev/null 2>&1; then
-  useradd --create-home --user-group --groups wheel,audio,video,storage,optical,lp --shell /bin/bash aether
+  useradd --create-home --user-group \
+    --groups wheel,audio,video,storage,optical,lp,autologin \
+    --shell /bin/bash aether
+else
+  usermod --append --groups wheel,audio,video,storage,optical,lp,autologin aether
 fi
 
-# This account exists only in the live image and is automatically logged in.
-# The live environment is not intended to be used as a persistent secure account.
-passwd --delete aether >/dev/null
 install -d -o aether -g aether -m 0755 /home/aether
+
+# Configure LightDM after its package has been installed into the live root.
+cat > /etc/lightdm/lightdm.conf <<'LIGHTDM'
+[Seat:*]
+greeter-session=lightdm-gtk-greeter
+user-session=xfce
+autologin-user=aether
+autologin-user-timeout=0
+autologin-session=xfce
+LIGHTDM
