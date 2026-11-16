@@ -1,0 +1,4 @@
+[Unit]
+Description=AETHER OS graphical default target
+Requires=graphical.target
+After=graphical.target
