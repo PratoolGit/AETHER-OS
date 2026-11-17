@@ -40,6 +40,11 @@ if grep -Eq '^[[:space:]]*udisks2([[:space:]]|$)' profile/packages.x86_64; then
   exit 1
 fi
 
+if grep -Eq '^[[:space:]]*thunar-volman([[:space:]]|$)' profile/packages.x86_64; then
+  echo "Thunar removable-volume auto-management must stay out of Alpha 0.1." >&2
+  exit 1
+fi
+
 if grep -Eq '^[[:space:]]*xfce4([[:space:]]|$)' profile/packages.x86_64; then
   echo "Use the explicit XFCE package subset, not the full xfce4 group." >&2
   exit 1
@@ -52,6 +57,7 @@ grep -Fxq 'Exec = /usr/local/bin/aether-live-user-setup' "$hook"
 bash -n profile/profiledef.sh
 bash -n scripts/build-iso.sh
 bash -n scripts/check-iso.sh
+bash -n scripts/check-profile.sh
 bash -n profile/airootfs/usr/local/bin/aether
 bash -n profile/airootfs/usr/local/bin/aether-live-user-setup
 
