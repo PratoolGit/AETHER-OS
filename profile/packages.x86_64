@@ -17,6 +17,10 @@ wpa_supplicant
 bluez
 bluez-utils
 
+# Graphics: Mesa OpenGL and AMD RADV Vulkan
+mesa
+vulkan-radeon
+
 # Xorg and a deliberately minimal XFCE session
 xorg-server
 xf86-input-libinput
