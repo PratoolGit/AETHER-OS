@@ -76,6 +76,7 @@ case "$cmd" in
     run_root pacman -Rns "$@"
     ;;
   setup)
+    [ "$#" -ge 2 ] || { echo "Usage: aether setup {developer|windows}" >&2; exit 2; }
     case "$2" in
       developer)
         run_root pacman -S --needed git base-devel nodejs npm python python-pip go rustup
