@@ -53,6 +53,8 @@ In a terminal, use the AETHER helper:
 - aether search TERM
 - aether info
 - aether network
+- aether setup developer
+- aether setup windows
 
 Familiar aliases are also provided: cls, dir, copy, move, del, ipconfig and tasklist. These are convenience shortcuts; standard Linux commands remain available.
 
