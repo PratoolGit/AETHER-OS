@@ -14,6 +14,7 @@ pacman_conf="pacman.conf"
 
 buildmodes=('iso')
 bootmodes=('uefi.systemd-boot')
+kernel_params_x86_64="console=tty0 console=ttyS0,115200n8 systemd.show_status=1 systemd.log_target=console"
 
 # Preserve executable permissions and sudoers safety for the live-session helpers.
 file_permissions=(
