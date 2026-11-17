@@ -28,7 +28,7 @@ do
 done
 
 for package in base linux linux-firmware mkinitcpio mkinitcpio-archiso \
-               networkmanager wpa_supplicant bluez lightdm zram-generator
+               networkmanager wpa_supplicant bluez lightdm zram-generator mesa vulkan-radeon
 do
   if ! grep -Fxq "$package" profile/packages.x86_64; then
     echo "Required package is missing from packages.x86_64: $package" >&2
