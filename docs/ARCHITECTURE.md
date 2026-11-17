@@ -8,17 +8,26 @@ AETHER OS is a customized Arch Linux distribution, not a new kernel. It uses the
 
 1. **Boot and live image:** Archiso builds a reproducible x86_64 live image. The first prototype uses UEFI systemd-boot because it is directly supported by Archiso. Limine remains the intended bootloader; its ISO integration is a separate engineering task and must be tested before switching.
 2. **Base system:** Arch Linux packages, systemd, pacman and NetworkManager.
-3. **Desktop baseline:** XFCE is a low-overhead benchmark baseline, not a final design lock-in.
+3. **Desktop baseline:** a selected subset of XFCE components is used to avoid installing the entire xfce4 package group. This is a low-overhead benchmark baseline, not a final design lock-in.
 4. **AETHER experience:** custom dock, panel, launcher, settings, appearance and performance tools will be developed as separate components.
 5. **Optional compatibility:** Wine, Bottles, Proton, Flatpak applications and developer toolchains are installed on demand.
+
+## Live-session initialization
+
+A build-only pacman hook runs after LightDM is installed. It creates the disposable aether user, configures LightDM autologin, and enables NetworkManager, Bluetooth and the display-manager service. The hook removes itself after setup so it does not run during later package operations in the live session.
+
+The live user has passwordless sudo for testing convenience. This is acceptable only for a disposable live session, not for a persistent personal account.
 
 ## Memory budget
 
 The 600–800 MB idle target applies to a defined, clean desktop session after startup settles. It must be measured on the reference ASUS laptop and in a repeatable virtual-machine configuration. Memory usage depends on kernel, firmware, desktop, drivers, display resolution and background services. No target is guaranteed before measurement.
 
+zram provides compressed swap in RAM to help under memory pressure. It does not reduce the desktop's resident memory footprint and must not be presented as physical RAM savings.
+
 ## Windows and development compatibility
 
 - Linux development tools run natively.
+- The optional developer setup installs common language runtimes and build tools.
 - Windows applications may run through Wine or Bottles; compatibility varies by application.
 - Games may use Steam/Proton; anti-cheat and DRM support varies.
 - Keep large compatibility stacks optional to protect the base memory and ISO footprint.
