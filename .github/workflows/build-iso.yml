@@ -43,10 +43,16 @@ jobs:
 
               # Query the built image, not only the requested package list.
               localdb="/workspace/.work/x86_64/airootfs/var/lib/pacman/local"
-              if find "$localdb" -maxdepth 1 -type d -name "udisks2-*" -print -quit | grep -q .; then
-                echo "ERROR: udisks2 was pulled into the live image." >&2
+              if [[ ! -d "$localdb" ]]; then
+                echo "ERROR: the built image package database is missing." >&2
                 exit 1
               fi
+              for package in udisks2 gvfs gvfs-mtp thunar-volman; do
+                if find "$localdb" -maxdepth 1 -type d -name "$package-*" -print -quit | grep -q .; then
+                  echo "ERROR: $package was pulled into the live image." >&2
+                  exit 1
+                fi
+              done
 
               cd /workspace/out
               sha256sum *.iso > SHA256SUMS
