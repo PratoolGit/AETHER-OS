@@ -3,62 +3,97 @@ set -Eeuo pipefail
 
 usage() {
   cat <<'HELP'
-AETHER OS command helper
+AETHER OS helper
 
 Usage:
-  aether help                 Show this help
-  aether update               Update installed packages
-  aether install PACKAGE      Install a package
-  aether remove PACKAGE       Remove a package
-  aether search TERM          Search available packages
-  aether info                 Show basic system information
-  aether network              Show network interfaces and addresses
+  aether help
+  aether info
+  aether network
+  aether update
+  aether search TERM
+  aether install PACKAGE [PACKAGE...]
+  aether remove PACKAGE [PACKAGE...]
+  aether setup developer
+  aether setup windows
 
-You can still use normal Linux commands and pacman directly.
+Examples:
+  aether search firefox
+  aether install firefox git
+  aether setup developer
+
+Standard Linux commands and pacman remain available.
 HELP
 }
 
-need_sudo() {
-  if [[ "$EUID" -eq 0 ]]; then return 0; fi
-  if command -v sudo >/dev/null 2>&1; then return 0; fi
-  echo "sudo is not available." >&2
-  exit 1
+run_root() {
+  if [ "$EUID" -eq 0 ]; then
+    "$@"
+  elif command -v sudo >/dev/null 2>&1; then
+    sudo "$@"
+  else
+    echo "This operation requires root privileges, but sudo is unavailable." >&2
+    return 1
+  fi
 }
 
-case "${1:-help}" in
+if [ "$#" -eq 0 ]; then
+  cmd=help
+else
+  cmd="$1"
+fi
+
+case "$cmd" in
   help|-h|--help)
     usage
     ;;
-  update)
-    need_sudo
-    sudo pacman -Syu
-    ;;
-  install)
-    [[ -n "${2:-}" ]] || { echo "Usage: aether install PACKAGE" >&2; exit 2; }
-    need_sudo
-    sudo pacman -S --needed "$2"
-    ;;
-  remove)
-    [[ -n "${2:-}" ]] || { echo "Usage: aether remove PACKAGE" >&2; exit 2; }
-    need_sudo
-    sudo pacman -Rns "$2"
-    ;;
-  search)
-    [[ -n "${2:-}" ]] || { echo "Usage: aether search TERM" >&2; exit 2; }
-    pacman -Ss "$2"
-    ;;
   info)
-    printf 'AETHER OS\n'
-    printf 'Kernel: '
+    printf 'AETHER OS\nKernel: '
     uname -r
     printf 'Architecture: '
     uname -m
+    printf 'Memory: '
+    free -h | awk '/^Mem:/ {print $2 " total, " $7 " available"}'
     ;;
   network)
     ip -brief address
     ;;
+  update)
+    run_root pacman -Syu
+    ;;
+  search)
+    shift
+    [ "$#" -gt 0 ] || { echo "Usage: aether search TERM" >&2; exit 2; }
+    pacman -Ss "$*"
+    ;;
+  install)
+    shift
+    [ "$#" -gt 0 ] || { echo "Usage: aether install PACKAGE [PACKAGE...]" >&2; exit 2; }
+    run_root pacman -S --needed "$@"
+    ;;
+  remove)
+    shift
+    [ "$#" -gt 0 ] || { echo "Usage: aether remove PACKAGE [PACKAGE...]" >&2; exit 2; }
+    run_root pacman -Rns "$@"
+    ;;
+  setup)
+    case "$2" in
+      developer)
+        run_root pacman -S --needed git base-devel nodejs npm python python-pip go rustup
+        ;;
+      windows)
+        run_root pacman -S --needed wine winetricks flatpak
+        run_root flatpak remote-add --if-not-exists --system flathub \
+          https://flathub.org/repo/flathub.flatpakrepo
+        run_root flatpak install --system --assumeyes flathub com.usebottles.bottles
+        ;;
+      *)
+        echo "Usage: aether setup {developer|windows}" >&2
+        exit 2
+        ;;
+    esac
+    ;;
   *)
-    echo "Unknown command: $1" >&2
+    echo "Unknown command: $cmd" >&2
     usage
     exit 2
     ;;
