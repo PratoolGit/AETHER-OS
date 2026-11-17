@@ -39,8 +39,8 @@ fi
   -cpu max \
   -m 4096 \
   -smp 4 \
-  -drive "if=pflash,format=raw,readonly=on,file=$OVMF_CODE" \
-  -drive "if=pflash,format=raw,file=$OVMF_VARS" \
+  -drive "if=pflash,format=raw,unit=0,readonly=on,file=$OVMF_CODE" \
+  -drive "if=pflash,format=raw,unit=1,file=$OVMF_VARS" \
   -cdrom "$ISO_PATH" \
   -boot order=d \
   -display none \
