@@ -17,10 +17,10 @@ The first alpha is a live-session prototype. It is not an installer and must not
 - Use a dedicated USB drive; a 32 GB or larger USB 3.x drive is recommended for practical persistence testing.
 - Writing an ISO to a USB drive erases that USB drive. Confirm the selected device by model and capacity before writing.
 - Do not select the Windows internal SSD.
-- The initial profile excludes UDisks2 and Thunar's removable-volume manager, so the desktop does not offer its usual automatic volume-mount workflow.
+- The profile omits GVFS, UDisks2 and Thunar's removable-volume manager. The build workflow checks the installed package database to ensure UDisks2 was not pulled in as a transitive dependency. This removes Thunar's usual GVFS-based mount workflow, but it is not block-device write protection.
 - Do not create swap, persistence, logs or application data on the Windows disk.
 - Keep Secure Boot disabled for the initial prototype unless the image has been signed and verified.
-- The first image does not yet provide persistent live storage; persistence is a later milestone. The live account is created during ISO construction by a one-time package hook. It is a disposable aether account with passwordless sudo for the live session; do not use it as a secure personal account.
+- The first image does not yet provide persistent live storage; persistence is a later milestone. The live desktop intentionally has no GVFS trash, remote-file or removable-volume integration. The live account is created during ISO construction by a one-time package hook. It is a disposable aether account with passwordless sudo for the live session; do not use it as a secure personal account.
 
 ## Memory benchmark
 
