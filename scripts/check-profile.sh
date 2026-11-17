@@ -18,7 +18,8 @@ for file in \
   profile/airootfs/usr/local/bin/aether \
   profile/airootfs/usr/local/bin/aether-live-user-setup \
   scripts/build-iso.sh \
-  scripts/check-iso.sh
+  scripts/check-iso.sh \
+  scripts/vm-smoke-test.sh
 do
   if [[ ! -f "$file" ]]; then
     echo "Missing required AETHER profile file: $file" >&2
@@ -35,20 +36,25 @@ do
   fi
 done
 
-if grep -Eq '^[[:space:]]*udisks2([[:space:]]|$)' profile/packages.x86_64; then
-  echo "UDisks2 must stay out of the Alpha 0.1 image." >&2
-  exit 1
-fi
-
-if grep -Eq '^[[:space:]]*thunar-volman([[:space:]]|$)' profile/packages.x86_64; then
-  echo "Thunar removable-volume auto-management must stay out of Alpha 0.1." >&2
-  exit 1
-fi
+for package in udisks2 gvfs gvfs-mtp thunar-volman; do
+  if grep -Eq "^[[:space:]]*$package([[:space:]]|$)" profile/packages.x86_64; then
+    echo "$package must stay out of the Alpha 0.1 image." >&2
+    exit 1
+  fi
+done
 
 if grep -Eq '^[[:space:]]*xfce4([[:space:]]|$)' profile/packages.x86_64; then
   echo "Use the explicit XFCE package subset, not the full xfce4 group." >&2
   exit 1
 fi
+
+if grep -Eq '(^|[[:space:]])memdisk([[:space:]]|$)' profile/airootfs/etc/mkinitcpio.conf.d/archiso.conf; then
+  echo "The Syslinux memdisk initramfs hook is not used in this UEFI build." >&2
+  exit 1
+fi
+
+grep -Fq 'kernel_params_x86_64=' profile/profiledef.sh
+grep -Fq 'console=ttyS0,115200n8' profile/profiledef.sh
 
 hook="profile/airootfs/etc/pacman.d/hooks/90-aether-live-setup.hook"
 grep -Fxq 'Target = lightdm' "$hook"
@@ -58,6 +64,7 @@ bash -n profile/profiledef.sh
 bash -n scripts/build-iso.sh
 bash -n scripts/check-iso.sh
 bash -n scripts/check-profile.sh
+bash -n scripts/vm-smoke-test.sh
 bash -n profile/airootfs/usr/local/bin/aether
 bash -n profile/airootfs/usr/local/bin/aether-live-user-setup
 
