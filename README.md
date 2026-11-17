@@ -64,7 +64,7 @@ Open the repository's Actions tab and run **Build AETHER OS ISO**, or push a cha
 
 ## Safety
 
-AETHER OS is experimental. Test from a dedicated USB drive first. Alpha 0.1 is not an installer and has no disk-partitioning workflow. UDisks2-based volume mounting is intentionally omitted from the initial package set. Do not manually mount or write to internal Windows partitions during testing. The current alpha is a live-session prototype, not an installer. No software can promise absolute protection against every firmware, hardware or user error.
+AETHER OS is experimental. Test from a dedicated USB drive first. Alpha 0.1 is not an installer and has no disk-partitioning workflow. GVFS and UDisks2 are excluded from the live package set and checked after image construction, removing Thunar's normal removable-volume mounting integration. This is not block-device write protection. Do not manually mount or write to internal Windows partitions during testing. The current alpha is a live-session prototype, not an installer. No software can promise absolute protection against every firmware, hardware or user error.
 
 ## Project documents
 
