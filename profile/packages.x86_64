@@ -1,6 +1,6 @@
-# AETHER OS Alpha 0.1 — deliberately small starting package set.
-# Keep optional developer and Windows-compatibility stacks out of the base
-# image; users can add them when needed.
+# AETHER OS Alpha 0.1 — small, explicit x86_64 package set.
+# Do not use the full xfce4 group: install only the desktop components we need.
+# Keep developer and Windows-compatibility stacks optional.
 
 # Core and boot
 base
@@ -11,22 +11,29 @@ mkinitcpio
 mkinitcpio-archiso
 sudo
 
-# Network and Bluetooth
+# Networking and Bluetooth
 networkmanager
 wpa_supplicant
-wireless-regdb
 bluez
 bluez-utils
 
-# AMD graphics and desktop
-mesa
-vulkan-radeon
-xfce4
-xfce4-terminal
-thunar
+# Xorg and a deliberately minimal XFCE session
 xorg-server
-xorg-xinit
 xf86-input-libinput
+exo
+garcon
+thunar
+tumbler
+xfce4-appfinder
+xfce4-panel
+xfce4-power-manager
+xfce4-session
+xfce4-settings
+xfce4-terminal
+xfce4-notifyd
+xfconf
+xfdesktop
+xfwm4
 lightdm
 lightdm-gtk-greeter
 polkit
@@ -47,8 +54,11 @@ xdg-desktop-portal
 xdg-desktop-portal-gtk
 gvfs
 gvfs-mtp
-tumbler
 file-roller
+
+# Memory pressure protection (swap stays in RAM; no disk swap is configured)
+zram-generator
+
 # Basic tools
 git
 curl
