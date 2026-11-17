@@ -8,9 +8,10 @@ AETHER OS is a customized Arch Linux distribution, not a new kernel. It uses the
 
 1. **Boot and live image:** Archiso builds a reproducible x86_64 live image. The first prototype uses UEFI systemd-boot because it is directly supported by Archiso. Limine remains the intended bootloader; its ISO integration is a separate engineering task and must be tested before switching.
 2. **Base system:** Arch Linux packages, systemd, pacman and NetworkManager.
-3. **Desktop baseline:** a selected subset of XFCE components is used to avoid installing the entire xfce4 package group. This is a low-overhead benchmark baseline, not a final design lock-in.
-4. **AETHER experience:** custom dock, panel, launcher, settings, appearance and performance tools will be developed as separate components.
-5. **Optional compatibility:** Wine, Bottles, Proton, Flatpak applications and developer toolchains are installed on demand.
+3. **Graphics stack:** Mesa provides OpenGL; `vulkan-radeon` supplies the open-source RADV Vulkan driver for the reference AMD GPU. Linux kernel AMDGPU support and firmware come from the standard kernel and linux-firmware packages.
+4. **Desktop baseline:** a selected subset of XFCE components is used to avoid installing the entire xfce4 package group. This is a low-overhead benchmark baseline, not a final design lock-in.
+5. **AETHER experience:** custom dock, panel, launcher, settings, appearance and performance tools will be developed as separate components.
+6. **Optional compatibility:** Wine, Bottles, Proton, Flatpak applications and developer toolchains are installed on demand.
 
 ## Live-session initialization
 
