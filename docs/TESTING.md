@@ -17,22 +17,23 @@ The first alpha is a live-session prototype. It is not an installer and must not
 - Use a dedicated USB drive; a 32 GB or larger USB 3.x drive is recommended for practical persistence testing.
 - Writing an ISO to a USB drive erases that USB drive. Confirm the selected device by model and capacity before writing.
 - Do not select the Windows internal SSD.
-- Do not enable automatic mounting of internal disks. The initial image omits UDisks2, so desktop volume mounting is intentionally unavailable until disk-protection rules are implemented.
+- The initial profile excludes UDisks2 and Thunar's removable-volume manager, so the desktop does not offer its usual automatic volume-mount workflow.
 - Do not create swap, persistence, logs or application data on the Windows disk.
 - Keep Secure Boot disabled for the initial prototype unless the image has been signed and verified.
-- The first image does not yet provide persistent live storage; persistence is a later milestone. The live session automatically creates a temporary aether account and logs into XFCE; do not use it as a secure personal account.
+- The first image does not yet provide persistent live storage; persistence is a later milestone. The live account is created during ISO construction by a one-time package hook. It is a disposable aether account with passwordless sudo for the live session; do not use it as a secure personal account.
 
 ## Memory benchmark
 
 After the desktop has settled for five minutes, record:
 
 - free -h output, especially available memory.
+- swapon --show, to confirm zram and the absence of disk-backed swap.
 - systemd-analyze boot time.
 - Top resident processes from ps.
 - Desktop resolution, connected displays and enabled visual effects.
 - Whether the session is running in a VM or on the ASUS VivoBook.
 
-The 600–800 MB idle RAM target is not considered achieved until measured on the real laptop with the exact desktop profile and test method documented.
+The 600–800 MB idle RAM target is not considered achieved until measured on the real laptop with the exact desktop profile and test method documented. zram capacity must not be counted as physical RAM savings.
 
 ## Reference laptop test matrix
 
