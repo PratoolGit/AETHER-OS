@@ -1,27 +1,22 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# LightDM's autologin PAM stack requires membership in the autologin group.
+# This script is run once by the AETHER pacman hook during ISO creation.
+# It runs inside the target live root, after LightDM and required services
+# have been installed.
+
+getent group wheel >/dev/null || groupadd --system wheel
 getent group autologin >/dev/null || groupadd --system autologin
 
-# Add only groups that exist in this Arch base image.
-live_groups=()
-for group in wheel audio video storage optical lp autologin; do
-  if getent group "$group" >/dev/null; then
-    live_groups+=("$group")
-  fi
-done
-group_list="$(IFS=,; printf '%s' "${live_groups[*]}")"
-
 if ! id aether >/dev/null 2>&1; then
-  useradd --create-home --user-group --groups "$group_list" --shell /bin/bash aether
+  useradd --create-home --user-group --groups wheel,autologin --shell /bin/bash aether
 else
-  usermod --append --groups "$group_list" aether
+  usermod --append --groups wheel,autologin aether
 fi
 
 install -d -o aether -g aether -m 0755 /home/aether
 
-# Configure LightDM after its package has been installed into the live root.
+# LightDM uses this disposable account for the automatic live-session login.
 cat > /etc/lightdm/lightdm.conf <<'LIGHTDM'
 [Seat:*]
 greeter-session=lightdm-gtk-greeter
@@ -30,3 +25,15 @@ autologin-user=aether
 autologin-user-timeout=0
 autologin-session=xfce
 LIGHTDM
+
+# Enable only the services required for the live desktop and connectivity.
+install -d -m 0755 /etc/systemd/system/multi-user.target.wants
+ln -sfn /usr/lib/systemd/system/NetworkManager.service \
+  /etc/systemd/system/multi-user.target.wants/NetworkManager.service
+ln -sfn /usr/lib/systemd/system/bluetooth.service \
+  /etc/systemd/system/multi-user.target.wants/bluetooth.service
+ln -sfn /usr/lib/systemd/system/lightdm.service \
+  /etc/systemd/system/display-manager.service
+
+# The setup hook is build-time only. Do not run it on later live-session updates.
+rm -f /etc/pacman.d/hooks/90-aether-live-setup.hook
