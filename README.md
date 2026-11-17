@@ -11,7 +11,7 @@ A lightweight, highly customizable Linux distribution focused on developer produ
 - Linux development support with optional runtimes and tools installed on demand.
 - Windows application compatibility through optional Wine/Bottles/Proton components.
 - A beginner-friendly command experience with familiar aliases and guided system tools, while retaining standard Linux commands.
-- A persistent live USB workflow that does not automatically mount or modify internal Windows disks.
+- Safe USB-first testing. Alpha 0.1 has no installer or persistent live storage and does not automatically mount internal Windows volumes.
 
 ## Current alpha
 
@@ -62,7 +62,7 @@ Open the repository's Actions tab and run **Build AETHER OS ISO**, or push a cha
 
 ## Safety
 
-AETHER OS is experimental. Test from a USB drive first. Do not install it to an internal disk until the installer and disk-selection safeguards have been independently validated. The current alpha is a live-session prototype, not an installer. No software can promise absolute protection against every firmware, hardware or user error.
+AETHER OS is experimental. Test from a dedicated USB drive first. Alpha 0.1 is not an installer and has no disk-partitioning workflow. UDisks2-based volume mounting is intentionally omitted from the initial package set. Do not manually mount or write to internal Windows partitions during testing. The current alpha is a live-session prototype, not an installer. No software can promise absolute protection against every firmware, hardware or user error.
 
 ## Project documents
 
