@@ -52,8 +52,6 @@ xdg-user-dirs
 xdg-utils
 xdg-desktop-portal
 xdg-desktop-portal-gtk
-gvfs
-gvfs-mtp
 file-roller
 
 # Memory pressure protection (swap stays in RAM; no disk swap is configured)
