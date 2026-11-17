@@ -25,11 +25,8 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Check shell syntax
-        run: |
-          bash -n scripts/build-iso.sh
-          bash -n scripts/check-iso.sh
-          bash -n profile/profiledef.sh
+      - name: Validate profile and shell scripts
+        run: bash scripts/check-profile.sh
 
       - name: Build with Arch Linux and archiso
         shell: bash
