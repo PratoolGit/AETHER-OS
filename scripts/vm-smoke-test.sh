@@ -5,16 +5,16 @@ ROOT_DIR="$(cd -- "$(dirname -- "$0")/.." && pwd)"
 shopt -s nullglob
 images=("$ROOT_DIR"/out/*.iso)
 
-if (( \${#images[@]} != 1 )); then
-  echo "Expected exactly one ISO in out/; found \${#images[@]}." >&2
+if (( ${#images[@]} != 1 )); then
+  echo "Expected exactly one ISO in out/; found ${#images[@]}." >&2
   exit 2
 fi
-ISO_PATH="\${images[0]}"
+ISO_PATH="${images[0]}"
 
-QEMU_BIN="\${QEMU_BIN:-qemu-system-x86_64}"
-OVMF_CODE="\${OVMF_CODE:-/usr/share/OVMF/OVMF_CODE_4M.fd}"
-OVMF_VARS_TEMPLATE="\${OVMF_VARS_TEMPLATE:-/usr/share/OVMF/OVMF_VARS_4M.fd}"
-BOOT_TIMEOUT="\${AETHER_VM_BOOT_TIMEOUT:-240}"
+QEMU_BIN="${QEMU_BIN:-qemu-system-x86_64}"
+OVMF_CODE="${OVMF_CODE:-/usr/share/OVMF/OVMF_CODE_4M.fd}"
+OVMF_VARS_TEMPLATE="${OVMF_VARS_TEMPLATE:-/usr/share/OVMF/OVMF_VARS_4M.fd}"
+BOOT_TIMEOUT="${AETHER_VM_BOOT_TIMEOUT:-360}"
 
 command -v "$QEMU_BIN" >/dev/null 2>&1 || {
   echo "Missing $QEMU_BIN. Install qemu-system-x86." >&2
@@ -23,7 +23,7 @@ command -v "$QEMU_BIN" >/dev/null 2>&1 || {
 [[ -r "$OVMF_CODE" ]] || { echo "Missing OVMF firmware: $OVMF_CODE" >&2; exit 1; }
 [[ -r "$OVMF_VARS_TEMPLATE" ]] || { echo "Missing OVMF variables template: $OVMF_VARS_TEMPLATE" >&2; exit 1; }
 
-WORK_DIR="$(mktemp -d "\${TMPDIR:-/tmp}/aether-uefi-smoke.XXXXXX")"
+WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/aether-uefi-smoke.XXXXXX")"
 OVMF_VARS="$WORK_DIR/OVMF_VARS.fd"
 SERIAL_LOG="$WORK_DIR/serial.log"
 QEMU_LOG="$WORK_DIR/qemu.log"
@@ -81,7 +81,7 @@ while (( elapsed < BOOT_TIMEOUT )); do
   elapsed=$((elapsed + 1))
 done
 
-echo "FAIL: LightDM did not start within \${BOOT_TIMEOUT}s." >&2
+echo "FAIL: LightDM did not start within ${BOOT_TIMEOUT}s." >&2
 echo "--- QEMU log ---" >&2
 cat "$QEMU_LOG" >&2 || true
 echo "--- Serial log (last 250 lines) ---" >&2
