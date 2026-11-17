@@ -40,9 +40,25 @@ jobs:
               pacman -Syu --noconfirm
               pacman -S --needed --noconfirm archiso
               mkarchiso -v -w /workspace/.work -o /workspace/out /workspace/profile
+
+              # Query the built image, not only the requested package list.
+              localdb="/workspace/.work/x86_64/airootfs/var/lib/pacman/local"
+              if find "$localdb" -maxdepth 1 -type d -name "udisks2-*" -print -quit | grep -q .; then
+                echo "ERROR: udisks2 was pulled into the live image." >&2
+                exit 1
+              fi
+
               cd /workspace/out
               sha256sum *.iso > SHA256SUMS
             '
+
+      - name: Install UEFI VM test tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends qemu-system-x86 ovmf
+
+      - name: Boot ISO in a UEFI virtual machine
+        run: bash scripts/vm-smoke-test.sh
 
       - name: Upload ISO and checksum
         uses: actions/upload-artifact@v4
