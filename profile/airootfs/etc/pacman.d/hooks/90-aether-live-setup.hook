@@ -1,0 +1,12 @@
+# remove from airootfs!
+# Run once after LightDM has been installed in the target live root.
+[Trigger]
+Operation = Install
+Type = Package
+Target = lightdm
+
+[Action]
+Description = Preparing the AETHER OS live session
+When = PostTransaction
+Depends = shadow
+Exec = /usr/local/bin/aether-live-user-setup
