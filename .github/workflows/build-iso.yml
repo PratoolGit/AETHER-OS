@@ -28,7 +28,7 @@ jobs:
       - name: Validate profile and shell scripts
         run: bash scripts/check-profile.sh
 
-      - name: Build with Arch Linux and archiso
+      - name: Build with current Arch Linux and archiso
         shell: bash
         run: |
           mkdir -p "$GITHUB_WORKSPACE/out" "$GITHUB_WORKSPACE/.work"
@@ -41,18 +41,65 @@ jobs:
               pacman -S --needed --noconfirm archiso
               mkarchiso -v -w /workspace/.work -o /workspace/out /workspace/profile
 
-              # Query the built image, not only the requested package list.
-              localdb="/workspace/.work/x86_64/airootfs/var/lib/pacman/local"
-              if [[ ! -d "$localdb" ]]; then
-                echo "ERROR: the built image package database is missing." >&2
+              # Verify the built root filesystem, not just requested package names.
+              airootfs="/workspace/.work/x86_64/airootfs"
+              localdb="$airootfs/var/lib/pacman/local"
+              modules_dir="$airootfs/usr/lib/modules"
+              firmware_dir="$airootfs/usr/lib/firmware"
+              if [[ ! -d "$localdb" || ! -d "$modules_dir" ]]; then
+                echo "ERROR: built image package database or kernel modules are missing." >&2
                 exit 1
               fi
+
               for package in udisks2 gvfs gvfs-mtp thunar-volman; do
                 if find "$localdb" -maxdepth 1 -type d -name "$package-*" -print -quit | grep -q .; then
                   echo "ERROR: $package was pulled into the live image." >&2
                   exit 1
                 fi
               done
+
+              alias_files=("$modules_dir"/*/modules.alias)
+              if (( ${#alias_files[@]} == 0 )); then
+                echo "ERROR: kernel modules.alias was not generated." >&2
+                exit 1
+              fi
+
+              # ASUS reference laptop: MediaTek MT7902 PCIe Wi-Fi (14c3:7902).
+              if ! grep -Eiq "pci:v000014C3d00007902.*mt7921e" "${alias_files[@]}"; then
+                echo "ERROR: MT7902 Wi-Fi alias is absent from the built kernel." >&2
+                exit 1
+              fi
+
+              # ASUS reference laptop: MediaTek MT7902 Bluetooth USB interface (13d3:3579).
+              if ! grep -Eiq "usb:v13D3p3579.*btusb" "${alias_files[@]}"; then
+                echo "ERROR: MT7902 Bluetooth alias is absent from the built kernel." >&2
+                exit 1
+              fi
+
+              for firmware in \
+                mediatek/WIFI_MT7902_patch_mcu_1_1_hdr.bin.zst \
+                mediatek/WIFI_RAM_CODE_MT7902_1.bin.zst \
+                mediatek/BT_RAM_CODE_MT7902_1_1_hdr.bin.zst; do
+                if [[ ! -f "$firmware_dir/$firmware" ]]; then
+                  echo "ERROR: required MT7902 firmware is missing: $firmware" >&2
+                  exit 1
+                fi
+              done
+
+              # Confirm AMD APU graphics support is present in the shipped kernel/rootfs.
+              if ! find "$modules_dir" -type f -name "amdgpu.ko*" -print -quit | grep -q .; then
+                echo "ERROR: AMDGPU kernel module is missing." >&2
+                exit 1
+              fi
+              if [[ ! -d "$firmware_dir/amdgpu" ]]; then
+                echo "ERROR: AMDGPU firmware directory is missing." >&2
+                exit 1
+              fi
+
+              echo "PASS: built kernel includes MT7902 Wi-Fi/Bluetooth IDs and firmware."
+              echo "PASS: built rootfs includes the AMDGPU driver and firmware."
+              printf "Kernel build: "
+              find "$modules_dir" -mindepth 1 -maxdepth 1 -type d -printf "%f\\n" | head -n 1
 
               cd /workspace/out
               sha256sum *.iso > SHA256SUMS
@@ -69,7 +116,7 @@ jobs:
       - name: Upload ISO and checksum
         uses: actions/upload-artifact@v4
         with:
-          name: aether-os-alpha-0.1-iso
+          name: aether-os-alpha-iso
           path: |
             out/*.iso
             out/SHA256SUMS
