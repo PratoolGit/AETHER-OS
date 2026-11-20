@@ -19,7 +19,7 @@ A lightweight, highly customizable Linux distribution focused on developer produ
 - Archiso-based x86_64 live image using the current Arch kernel and firmware packages.
 - AMD integrated graphics support with AMDGPU, Mesa and RADV.
 - Explicit MediaTek firmware and CI assertions for the MT7902 Wi-Fi PCI ID, Bluetooth USB ID and all three MT7902 firmware files.
-- NetworkManager, Blueman, PipeWire, laptop brightness/battery utilities and hardware inspection tools.
+- NetworkManager, Blueman, PipeWire, battery/brightness utilities, tap-to-click defaults, touchpad and input inspection, AMD OpenGL/Vulkan diagnostics and display-mode inspection.
 - Dark AETHER appearance using Adwaita GTK 3 styling, Papirus icons, a custom midnight wallpaper, a searchable AETHER menu, top status panel and dock-style task switcher.
 - LightDM live session with a temporary AETHER user; automatic firstboot prompts are disabled and the graphical target is selected.
 - The AETHER diagnose command produces a local hardware report. It does not upload reports or include SSIDs, IP/MAC addresses, passwords or device serial numbers.
