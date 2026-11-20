@@ -10,7 +10,6 @@ A lightweight, highly customizable Linux distribution focused on developer produ
 - A highly configurable desktop: dock, panel, launcher, themes, window layouts, gestures and appearance controls.
 - Linux development support with optional runtimes and tools installed on demand.
 - Optional Windows app support through Wine, Winetricks and Bottles, with 32-bit compatibility repositories enabled but no 32-bit stack installed by default.
-- Windows application compatibility through optional Wine/Bottles/Proton components.
 - A beginner-friendly command experience with familiar aliases and guided system tools, while retaining standard Linux commands.
 - Safe USB-first testing. The alpha has no installer or persistent live storage and does not automatically mount internal Windows volumes.
 
@@ -22,7 +21,7 @@ A lightweight, highly customizable Linux distribution focused on developer produ
 - NetworkManager, Blueman, PipeWire, battery/brightness utilities, tap-to-click defaults, touchpad and input inspection, AMD OpenGL/Vulkan diagnostics and display-mode inspection.
 - Dark AETHER appearance using Adwaita GTK 3 styling, Papirus icons, a custom midnight wallpaper, a searchable AETHER menu, top status panel and dock-style task switcher.
 - LightDM live session with a temporary AETHER user; automatic firstboot prompts are disabled and the graphical target is selected.
-- The AETHER diagnose command produces a local hardware report. It does not upload reports or include SSIDs, IP/MAC addresses, passwords or device serial numbers.
+- The AETHER diagnose command prints or saves a local hardware report. It performs best-effort redaction of common network identifiers in filtered kernel logs; review the report before sharing. It is never uploaded.
 - GitHub Actions builds the ISO, verifies the installed package set and key hardware driver/firmware files, and boots the image in UEFI QEMU.
 
 The initial prototype currently uses UEFI systemd-boot because it is directly supported by Archiso. **Limine remains the intended bootloader** and requires a separately tested ISO integration step before the bootloader choice is finalized.
@@ -58,7 +57,7 @@ In a terminal, use the AETHER helper:
 - aether search TERM
 - aether info
 - aether network
-- aether diagnose — inspect hardware, kernel drivers, firmware, power, audio and mounted storage
+- aether diagnose — inspect hardware, AMD graphics, touchpad, drivers, firmware, power, audio and mounted storage
 - aether diagnose --save — save a report under /tmp
 - aether setup developer
 - aether setup windows — install Wine, Winetricks and Bottles (requires network access)
