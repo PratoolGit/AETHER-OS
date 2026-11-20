@@ -60,6 +60,8 @@ grep -Fq 'systemd.firstboot=0' profile/profiledef.sh
 hook="profile/airootfs/etc/pacman.d/hooks/90-aether-live-setup.hook"
 grep -Fxq 'Target = lightdm' "$hook"
 grep -Fxq 'Exec = /usr/local/bin/aether-live-user-setup' "$hook"
+grep -Fq '/usr/lib/systemd/system/graphical.target' \
+  profile/airootfs/usr/local/bin/aether-live-user-setup
 
 bash -n profile/profiledef.sh
 bash -n scripts/build-iso.sh
