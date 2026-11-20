@@ -19,6 +19,7 @@ for file in \
   profile/airootfs/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml \
   profile/airootfs/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml \
   profile/airootfs/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml \
+  profile/airootfs/etc/X11/xorg.conf.d/40-aether-touchpad.conf \
   profile/airootfs/etc/lightdm/lightdm-gtk-greeter.conf \
   profile/airootfs/usr/share/backgrounds/aether/aether-midnight.svg \
   profile/airootfs/usr/local/bin/aether \
@@ -38,7 +39,7 @@ for package in base linux linux-firmware linux-firmware-mediatek linux-firmware-
                amd-ucode mkinitcpio mkinitcpio-archiso networkmanager wpa_supplicant \
                bluez blueman lightdm zram-generator mesa vulkan-radeon \
                xfce4-whiskermenu-plugin xfce4-docklike-plugin xfce4-pulseaudio-plugin \
-               adw-gtk-theme papirus-icon-theme brightnessctl acpi pciutils usbutils rfkill
+               adw-gtk-theme papirus-icon-theme brightnessctl acpi pciutils usbutils rfkill mesa-utils vulkan-tools xorg-xrandr libinput-tools
 do
   if ! grep -Fxq "$package" profile/packages.x86_64; then
     echo "Required package is missing from packages.x86_64: $package" >&2
@@ -81,6 +82,7 @@ grep -Fq 'value="whiskermenu"' "$panel"
 grep -Fq 'value="pulseaudio"' "$panel"
 grep -Fq 'adw-gtk3-dark' profile/airootfs/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
 grep -Fq 'Papirus-Dark' profile/airootfs/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+grep -Fq 'Option "Tapping" "on"' profile/airootfs/etc/X11/xorg.conf.d/40-aether-touchpad.conf
 grep -Fq '[multilib]' profile/pacman.conf
 grep -Fq 'Include = /etc/pacman.d/mirrorlist' profile/pacman.conf
 
