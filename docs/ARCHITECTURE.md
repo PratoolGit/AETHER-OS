@@ -15,7 +15,7 @@ AETHER OS is a customized Arch Linux distribution, not a new kernel. It uses the
 
 ## Live-session initialization
 
-A build-only pacman hook runs after LightDM is installed. It creates the disposable aether user, configures LightDM autologin, and enables NetworkManager, Bluetooth and the display-manager service. The hook removes itself after setup so it does not run during later package operations in the live session.
+A build-only pacman hook runs after LightDM is installed. It creates the disposable aether user, configures LightDM autologin, enables NetworkManager and Bluetooth, links the display manager, and selects `graphical.target` as the default boot target. The live kernel command line includes `systemd.firstboot=0` so firstboot does not block on interactive timezone or locale questions. The hook removes itself after setup so it does not run during later package operations in the live session.
 
 The live user has passwordless sudo for testing convenience. This is acceptable only for a disposable live session, not for a persistent personal account.
 
