@@ -55,6 +55,7 @@ fi
 
 grep -Fq 'kernel_params_x86_64=' profile/profiledef.sh
 grep -Fq 'console=ttyS0,115200n8' profile/profiledef.sh
+grep -Fq 'systemd.firstboot=0' profile/profiledef.sh
 
 hook="profile/airootfs/etc/pacman.d/hooks/90-aether-live-setup.hook"
 grep -Fxq 'Target = lightdm' "$hook"
