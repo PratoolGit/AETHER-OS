@@ -11,27 +11,34 @@
 - [ ] Boot-test on the ASUS VivoBook Go 15 from USB.
 - [ ] Record idle RAM, boot time, CPU, graphics and storage benchmarks.
 
-## Alpha 0.2 — hardware and safety
+## Alpha 0.2 — laptop support and daily usability
 
-- Validate MediaTek MT7902 Wi-Fi and Bluetooth independently.
-- Test Intel, Realtek and Qualcomm wireless hardware where available.
-- Add explicit internal-disk protection for live sessions.
-- Design persistence on a separate USB partition; never enable persistence by writing to an internal Windows disk.
-- Add safe recovery and diagnostics.
+- [x] Include explicit MediaTek firmware for the reference MT7902 adapter.
+- [x] Add CI assertions for the MT7902 Wi-Fi PCI ID, Bluetooth USB ID and firmware blobs.
+- [x] Add AMDGPU kernel-module and firmware presence checks.
+- [x] Add local hardware diagnostics through the aether diagnose command.
+- [x] Add laptop-facing battery, brightness, Bluetooth, audio and hardware inspection utilities.
+- [x] Ship the first dark AETHER theme, custom wallpaper, searchable app menu and dock-style panel.
+- [ ] Validate Wi-Fi and Bluetooth independently on the physical ASUS.
+- [ ] Test AMD display acceleration, brightness keys, audio, touchpad and suspend/resume.
+- [ ] Add explicit internal-disk protection for live sessions.
+- [ ] Design persistence on a separate USB partition; never enable persistence by writing to an internal Windows disk.
 
-## Alpha 0.3 — AETHER desktop experience
+## Alpha 0.3 — complete AETHER desktop experience
 
-- Build a configurable dock, panel, launcher and control center.
-- Add theme, icon, font, animation and window-layout controls.
-- Benchmark XFCE, LXQt and KDE Plasma before selecting the long-term desktop foundation.
-- Keep optional visual effects disabled on low-memory hardware.
+- [x] Establish a dock, panel, launcher and desktop appearance baseline.
+- [ ] Build a dedicated control center for network, Bluetooth, power, themes and performance.
+- [ ] Add editable dock favorites and richer window-layout controls.
+- [ ] Add optional touchpad gestures and more keyboard shortcuts.
+- [ ] Benchmark XFCE, LXQt and KDE Plasma before selecting the long-term desktop foundation.
+- [ ] Keep optional visual effects disabled on low-memory hardware.
 
 ## Alpha 0.4 — compatibility and developer workflow
 
-- Add optional Windows compatibility profiles using Wine/Bottles and Steam/Proton.
-- Add guided installation of language runtimes, Git tools and developer applications.
-- Add familiar command aliases and beginner-friendly command helpers.
-- Preserve standard Linux commands and package-management behavior.
+- [ ] Add optional Windows compatibility profiles using Wine/Bottles and Steam/Proton.
+- [ ] Add guided installation of language runtimes, Git tools and developer applications.
+- [x] Keep familiar command aliases and beginner-friendly command helpers.
+- [x] Preserve standard Linux commands and package-management behavior.
 
 ## Release principles
 
