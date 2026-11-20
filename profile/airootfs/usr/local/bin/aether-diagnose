@@ -40,7 +40,7 @@ render_report() {
 
   printf 'AETHER OS — local hardware diagnostic\n'
   printf 'Generated: %s\n' "$(date --iso-8601=seconds 2>/dev/null || date)"
-  printf 'This report stays on this computer. It omits IP addresses, MAC addresses, Wi-Fi names, passwords and device serial numbers.\n'
+  printf 'This report stays local. Filtered kernel messages receive best-effort redaction of common IP, MAC and SSID forms. Review the report before sharing; it is never uploaded.\n'
 
   section "System"
   printf 'OS: '
