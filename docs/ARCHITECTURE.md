@@ -42,6 +42,7 @@ zram provides compressed swap in RAM to help under memory pressure. It does not 
 
 - Linux development tools run natively.
 - The optional developer setup installs common language runtimes and build tools.
+- The multilib repository is enabled, but no 32-bit runtime packages are installed in the base image. The optional Windows setup installs Wine, Winetricks, Zenity for the Winetricks GTK dialog and Bottles via Flatpak.
 - Windows applications may run through Wine or Bottles; compatibility varies by application.
 - Games may use Steam/Proton; anti-cheat and DRM support varies.
 - Keep large compatibility stacks optional to protect the base memory and ISO footprint.
