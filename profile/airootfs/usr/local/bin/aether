@@ -101,7 +101,7 @@ case "$cmd" in
         run_root pacman -S --needed git base-devel nodejs npm python python-pip go rustup
         ;;
       windows)
-        run_root pacman -S --needed wine winetricks flatpak
+        run_root pacman -S --needed wine winetricks zenity flatpak
         run_root flatpak remote-add --if-not-exists --system flathub \
           https://flathub.org/repo/flathub.flatpakrepo
         run_root flatpak install --system --assumeyes flathub com.usebottles.bottles
