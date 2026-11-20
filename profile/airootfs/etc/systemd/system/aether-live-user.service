@@ -1,8 +1,0 @@
-[Unit]
-Description=Prepare the AETHER OS live user
-Before=lightdm.service
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/bin/aether-live-user-setup
-RemainAfterExit=yes

@@ -11,7 +11,7 @@ on:
 
 concurrency:
   group: aether-iso-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -58,6 +58,14 @@ jobs:
                 fi
               done
 
+              # Include microcode for both AMD and Intel x86_64 systems.
+              for package in amd-ucode intel-ucode; do
+                if ! find "$localdb" -maxdepth 1 -type d -name "$package-*" -print -quit | grep -q .; then
+                  echo "ERROR: required CPU microcode package is missing: $package" >&2
+                  exit 1
+                fi
+              done
+
               alias_files=("$modules_dir"/*/modules.alias)
               if (( ${#alias_files[@]} == 0 )); then
                 echo "ERROR: kernel modules.alias was not generated." >&2
@@ -95,9 +103,18 @@ jobs:
                 echo "ERROR: AMDGPU firmware directory is missing." >&2
                 exit 1
               fi
+              if [[ ! -f "$airootfs/usr/lib/dri/radeonsi_dri.so" ]]; then
+                echo "ERROR: Mesa RadeonSI OpenGL driver is missing." >&2
+                exit 1
+              fi
+              if [[ ! -f "$airootfs/usr/share/vulkan/icd.d/radeon_icd.json" ]]; then
+                echo "ERROR: RADV Vulkan ICD manifest is missing." >&2
+                exit 1
+              fi
 
               echo "PASS: built kernel includes MT7902 Wi-Fi/Bluetooth IDs and firmware."
-              echo "PASS: built rootfs includes the AMDGPU driver and firmware."
+              echo "PASS: built rootfs includes AMDGPU, RadeonSI OpenGL and RADV Vulkan."
+              echo "PASS: AMD and Intel CPU microcode packages are installed."
               printf "Kernel build: "
               find "$modules_dir" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | head -n 1
 

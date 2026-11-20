@@ -88,6 +88,17 @@ render_report() {
       printf '  %s: not found\n' "$module"
     fi
   done
+  printf '\nReference MT7902 hardware ID matches:\n'
+  if modinfo -F alias mt7921e 2>/dev/null | grep -Eiq 'pci:v000014C3d00007902'; then
+    printf '  MT7902 Wi-Fi PCI ID 14c3:7902: matched by mt7921e\n'
+  else
+    printf '  MT7902 Wi-Fi PCI ID 14c3:7902: no alias match in this kernel\n'
+  fi
+  if modinfo -F alias btusb 2>/dev/null | grep -Eiq 'usb:v13D3p3579'; then
+    printf '  MT7902 Bluetooth USB ID 13d3:3579: matched by btusb\n'
+  else
+    printf '  MT7902 Bluetooth USB ID 13d3:3579: no alias match in this kernel\n'
+  fi
 
   section "Bluetooth service"
   systemctl is-active bluetooth 2>/dev/null || true
@@ -118,7 +129,16 @@ render_report() {
 
   section "Relevant kernel messages"
   if command -v journalctl >/dev/null 2>&1; then
-    journalctl -b -k --no-pager -o short-monotonic 2>/dev/null \
+    read_kernel_messages() {
+      if (( EUID == 0 )); then
+        journalctl "$@"
+      elif command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+        sudo -n journalctl "$@"
+      else
+        journalctl "$@"
+      fi
+    }
+    read_kernel_messages -b -k --no-pager -o short-monotonic 2>/dev/null \
       | grep -Ei 'mt7902|mt7921|mt76|mediatek|btusb|btmtk|bluetooth|amdgpu|firmware|ACPI BIOS Error|WLAN' \
       | tail -n 100 \
       | sed -E \
