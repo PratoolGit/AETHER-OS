@@ -81,6 +81,8 @@ grep -Fq 'value="whiskermenu"' "$panel"
 grep -Fq 'value="pulseaudio"' "$panel"
 grep -Fq 'adw-gtk3-dark' profile/airootfs/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
 grep -Fq 'Papirus-Dark' profile/airootfs/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+grep -Fq '[multilib]' profile/pacman.conf
+grep -Fq 'Include = /etc/pacman.d/mirrorlist' profile/pacman.conf
 
 python3 - <<'PY'
 from pathlib import Path
