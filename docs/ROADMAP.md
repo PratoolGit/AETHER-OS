@@ -6,8 +6,8 @@
 - [x] Establish a minimal XFCE desktop baseline.
 - [x] Add AMD graphics, firmware, NetworkManager, Bluetooth and PipeWire packages.
 - [x] Add a local build script and a GitHub Actions ISO build.
-- [ ] Confirm the first CI build completes.
-- [ ] Boot-test in a UEFI virtual machine.
+- [x] Confirm the first CI build completes (GitHub Actions run #51).
+- [x] Boot-test in a UEFI virtual machine (QEMU reached LightDM).
 - [ ] Boot-test on the ASUS VivoBook Go 15 from USB.
 - [ ] Record idle RAM, boot time, CPU, graphics and storage benchmarks.
 
