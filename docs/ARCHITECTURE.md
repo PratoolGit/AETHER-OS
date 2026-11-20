@@ -19,7 +19,8 @@ AETHER OS is a customized Arch Linux distribution, not a new kernel. It uses the
 - **ASUS Ryzen 3 / AMD APU:** include AMD microcode, the AMDGPU kernel module, AMD firmware, Mesa and RADV.
 - **MediaTek MT7902:** include MediaTek firmware and fail the ISO build if the kernel no longer advertises PCI ID 14c3:7902 through mt7921e, USB ID 13d3:3579 through btusb, or if any MT7902 firmware blob is missing.
 - **Other wireless chipsets:** ship the standard Arch firmware set for Intel, Realtek, Qualcomm/Atheros and other common vendors. Their hardware behavior still needs testing.
-- **Laptop controls:** XFCE Power Manager handles session power settings; brightnessctl and ACPI tools are available for direct diagnostics. libinput handles touchpad input.
+- **Laptop controls:** XFCE Power Manager handles session power settings; brightnessctl and ACPI tools are available for direct diagnostics. libinput handles touchpad input, with tap-to-click enabled and touchpad input disabled while typing. The diagnostics tool reports detected input devices and display modes.
+- **Graphics verification:** mesa-utils, vulkan-tools and xorg-xrandr are included so the real session can report the OpenGL renderer, Vulkan devices and connected display modes; this makes software rendering or missing GPU acceleration easier to spot.
 - **Do not equate package/alias checks with hardware validation:** BIOS/ACPI quirks, antenna/radio state, USB routing, suspend/resume and firmware loading must be tested on the real laptop.
 
 ## Live-session initialization
