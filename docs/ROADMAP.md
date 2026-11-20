@@ -17,7 +17,8 @@
 - [x] Add CI assertions for the MT7902 Wi-Fi PCI ID, Bluetooth USB ID and firmware blobs.
 - [x] Add AMDGPU kernel-module and firmware presence checks.
 - [x] Add local hardware diagnostics through the aether diagnose command.
-- [x] Add laptop-facing battery, brightness, Bluetooth, audio and hardware inspection utilities.
+- [x] Add laptop-facing battery, brightness, Bluetooth, audio, touchpad and hardware inspection utilities.
+- [x] Add OpenGL/Vulkan renderer and display-mode diagnostics for AMD graphics.
 - [x] Ship the first dark AETHER theme, custom wallpaper, searchable app menu and dock-style panel.
 - [ ] Validate Wi-Fi and Bluetooth independently on the physical ASUS.
 - [ ] Test AMD display acceleration, brightness keys, audio, touchpad and suspend/resume.
