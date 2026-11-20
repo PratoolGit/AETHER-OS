@@ -76,6 +76,7 @@ acpi
 lm_sensors
 pciutils
 usbutils
+rfkill
 
 # Memory pressure protection (swap stays in RAM; no disk swap is configured)
 zram-generator
