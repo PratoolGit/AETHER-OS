@@ -19,7 +19,7 @@ A lightweight, highly customizable Linux distribution focused on developer produ
 - AMD integrated graphics support with AMDGPU, Mesa and RADV.
 - Explicit MediaTek firmware and CI assertions for the MT7902 Wi-Fi PCI ID, Bluetooth USB ID and all three MT7902 firmware files.
 - NetworkManager, Blueman, PipeWire, battery/brightness utilities, tap-to-click defaults, touchpad and input inspection, AMD OpenGL/Vulkan diagnostics and display-mode inspection.
-- Dark AETHER appearance using Adwaita GTK 3 styling, Papirus icons, a custom midnight wallpaper, a searchable AETHER menu, top status panel and dock-style task switcher.
+- Dark AETHER appearance using Adwaita GTK 3 styling, Papirus icons, a custom midnight wallpaper, a searchable AETHER menu, top status panel, dock-style task switcher and a clickable AETHER Hardware Check menu item.
 - LightDM live session with a temporary AETHER user; automatic firstboot prompts are disabled and the graphical target is selected.
 - The AETHER diagnose command prints or saves a local hardware report. It performs best-effort redaction of common network identifiers in filtered kernel logs; review the report before sharing. It is never uploaded.
 - GitHub Actions builds the ISO, verifies the installed package set and key hardware driver/firmware files, and boots the image in UEFI QEMU.
