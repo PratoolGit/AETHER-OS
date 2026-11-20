@@ -2,7 +2,7 @@
 
 A lightweight, highly customizable Linux distribution focused on developer productivity and broad hardware support.
 
-> **Status:** Early alpha — the first bootable image is being assembled and has not yet passed CI or hardware testing.
+> **Status:** Early alpha — the UEFI live ISO builds successfully and passes an automated QEMU boot smoke test. Real-laptop hardware testing is still pending.
 
 ## Project goals
 
@@ -18,7 +18,7 @@ A lightweight, highly customizable Linux distribution focused on developer produ
 - Archiso-based x86_64 image profile.
 - XFCE desktop baseline selected for low-overhead benchmarking.
 - AMD graphics, Linux firmware, NetworkManager, Bluetooth and PipeWire.
-- LightDM live session with a temporary AETHER user.
+- LightDM live session with a temporary AETHER user; automatic firstboot prompts are disabled and the graphical target is selected.
 - Friendly AETHER command helper and familiar shell aliases.
 - GitHub Actions build workflow.
 
@@ -60,7 +60,7 @@ Familiar aliases are also provided: cls, dir, copy, move, del, ipconfig and task
 
 ## Build with GitHub Actions
 
-Open the repository's Actions tab and run **Build AETHER OS ISO**, or push a change to the ISO profile. A successful run uploads the ISO and SHA-256 checksum as a temporary workflow artifact.
+Open the repository's Actions tab and run **Build AETHER OS ISO**, or push a change to the ISO profile. Run [#51](https://github.com/PratoolGit/AETHER-OS/actions/runs/44699574544) completed successfully on 20 November 2026: the ISO built, passed the installed-package safety check, and reached LightDM in a UEFI QEMU smoke test. The ISO and SHA-256 checksum are included in the workflow artifact.
 
 ## Safety
 
