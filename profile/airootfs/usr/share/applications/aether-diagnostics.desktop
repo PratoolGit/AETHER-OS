@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=AETHER Hardware Check
+Comment=Inspect Wi-Fi, Bluetooth, AMD graphics, touchpad, battery and storage state
+Exec=xfce4-terminal --hold --execute aether diagnose
+Icon=utilities-system-monitor
+Terminal=false
+Categories=System;Utility;
+StartupNotify=true
