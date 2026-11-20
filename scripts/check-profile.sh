@@ -68,7 +68,6 @@ grep -Fq 'console=ttyS0,115200n8' profile/profiledef.sh
 grep -Fq 'systemd.firstboot=0' profile/profiledef.sh
 grep -Fq 'aether-diagnose' profile/profiledef.sh
 grep -Fq 'exec /usr/local/bin/aether-diagnose' profile/airootfs/usr/local/bin/aether
-grep -Fq 'aether diagnose' profile/airootfs/usr/local/bin/aether-diagnose || true
 
 hook="profile/airootfs/etc/pacman.d/hooks/90-aether-live-setup.hook"
 grep -Fxq 'Target = lightdm' "$hook"
