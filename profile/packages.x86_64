@@ -1,11 +1,12 @@
-# AETHER OS Alpha 0.1 — small, explicit x86_64 package set.
-# Do not use the full xfce4 group: install only the desktop components we need.
-# Keep developer and Windows-compatibility stacks optional.
+# AETHER OS Alpha — explicit x86_64 package set.
+# Keep heavy developer and Windows-compatibility stacks optional.
 
-# Core and boot
+# Core, boot and CPU microcode
 base
 linux
 linux-firmware
+linux-firmware-mediatek
+linux-firmware-amdgpu
 amd-ucode
 mkinitcpio
 mkinitcpio-archiso
@@ -16,12 +17,13 @@ networkmanager
 wpa_supplicant
 bluez
 bluez-utils
+blueman
 
 # Graphics: Mesa OpenGL and AMD RADV Vulkan
 mesa
 vulkan-radeon
 
-# Xorg and a deliberately minimal XFCE session
+# Xorg and a deliberately small XFCE session
 xorg-server
 xf86-input-libinput
 exo
@@ -43,6 +45,13 @@ lightdm-gtk-greeter
 polkit
 polkit-gnome
 
+# AETHER desktop experience: searchable menu, dock, dark theme and icons
+xfce4-whiskermenu-plugin
+xfce4-docklike-plugin
+xfce4-pulseaudio-plugin
+adw-gtk-theme
+papirus-icon-theme
+
 # Audio
 pipewire
 pipewire-alsa
@@ -57,6 +66,16 @@ xdg-utils
 xdg-desktop-portal
 xdg-desktop-portal-gtk
 file-roller
+mousepad
+xfce4-taskmanager
+xfce4-screenshooter
+
+# Laptop controls and hardware diagnostics
+brightnessctl
+acpi
+lm_sensors
+pciutils
+usbutils
 
 # Memory pressure protection (swap stays in RAM; no disk swap is configured)
 zram-generator
@@ -67,3 +86,4 @@ curl
 wget
 nano
 flatpak
+7zip
