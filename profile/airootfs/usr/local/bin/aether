@@ -9,6 +9,7 @@ Usage:
   aether help
   aether info
   aether network
+  aether diagnose [--save [PATH]]
   aether update
   aether search TERM
   aether install PACKAGE [PACKAGE...]
@@ -17,6 +18,9 @@ Usage:
   aether setup windows
 
 Examples:
+  aether network
+  aether diagnose
+  aether diagnose --save
   aether search firefox
   aether install firefox git
   aether setup developer
@@ -53,9 +57,24 @@ case "$cmd" in
     uname -m
     printf 'Memory: '
     free -h | awk '/^Mem:/ {print $2 " total, " $7 " available"}'
+    if command -v lscpu >/dev/null 2>&1; then
+      lscpu | awk -F: '/Model name/ {sub(/^[ \t]+/, "", $2); print "CPU: " $2; exit}'
+    fi
     ;;
   network)
-    ip -brief address
+    if command -v nmcli >/dev/null 2>&1; then
+      nmcli -f DEVICE,TYPE,STATE device status
+    else
+      echo "NetworkManager CLI (nmcli) is unavailable." >&2
+    fi
+    if command -v rfkill >/dev/null 2>&1; then
+      printf '\nRadio block status:\n'
+      rfkill list
+    fi
+    ;;
+  diagnose)
+    shift
+    exec /usr/local/bin/aether-diagnose "$@"
     ;;
   update)
     run_root pacman -Syu
