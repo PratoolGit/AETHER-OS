@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+SAVE_PATH=""
+while (($#)); do
+  case "$1" in
+    --save)
+      SAVE_PATH="${2:-}"
+      if [[ -z "$SAVE_PATH" || "$SAVE_PATH" == --* ]]; then
+        SAVE_PATH="/tmp/aether-diagnostics-$(date +%Y%m%d-%H%M%S).txt"
+      else
+        shift
+      fi
+      ;;
+    --help|-h)
+      echo "Usage: aether diagnose [--save [PATH]]"
+      exit 0
+      ;;
+    *)
+      echo "Unknown diagnostic option: $1" >&2
+      echo "Usage: aether diagnose [--save [PATH]]" >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
+
+render_report() {
+  section() { printf '\n\n========== %s ==========\n' "$1"; }
+  optional_command() {
+    local title="$1"
+    shift
+    section "$title"
+    if command -v "$1" >/dev/null 2>&1; then
+      "$@" 2>&1 || printf '[Command returned a diagnostic status.]\n'
+    else
+      printf '[Not installed: %s]\n' "$1"
+    fi
+  }
+
+  printf 'AETHER OS — local hardware diagnostic\n'
+  printf 'Generated: %s\n' "$(date --iso-8601=seconds 2>/dev/null || date)"
+  printf 'This report stays on this computer. It omits IP addresses, MAC addresses, Wi-Fi names, passwords and device serial numbers.\n'
+
+  section "System"
+  printf 'OS: '
+  if [[ -r /etc/os-release ]]; then
+    . /etc/os-release
+    printf '%s\n' "${PRETTY_NAME:-Unknown}"
+  else
+    printf 'Unknown\n'
+  fi
+  printf 'Kernel: %s\nArchitecture: %s\n' "$(uname -r)" "$(uname -m)"
+  if command -v lscpu >/dev/null 2>&1; then
+    lscpu | grep -E '^(Model name|CPU\(s\)|Architecture):' || true
+  fi
+
+  optional_command "Memory and swap" free -h
+  optional_command "zram devices" zramctl
+
+  section "Relevant PCI hardware and bound drivers"
+  if command -v lspci >/dev/null 2>&1; then
+    lspci -nnk | grep -A4 -Ei 'Network controller|Wireless controller|VGA compatible controller|Display controller|Audio device' || true
+  else
+    printf '[Install pciutils to inspect PCI devices.]\n'
+  fi
+
+  section "Relevant USB devices"
+  if command -v lsusb >/dev/null 2>&1; then
+    lsusb | grep -Ei 'MediaTek|Bluetooth|Wireless|802\.11|Network' || printf '[No matching USB device line found.]\n'
+  else
+    printf '[Install usbutils to inspect USB devices.]\n'
+  fi
+
+  section "Wi-Fi and network state"
+  optional_command "NetworkManager devices (SSID/IP intentionally omitted)" nmcli -f DEVICE,TYPE,STATE device status
+  optional_command "Radio block state" rfkill list
+
+  section "Driver modules"
+  if command -v lsmod >/dev/null 2>&1; then
+    lsmod | grep -E '^(amdgpu|mt7921e|mt76|btusb|btmtk)' || printf '[No matching driver currently loaded.]\n'
+  fi
+  printf 'Kernel module availability:\n'
+  for module in amdgpu mt7921e btusb; do
+    if modinfo "$module" >/dev/null 2>&1; then
+      printf '  %s: available\n' "$module"
+    else
+      printf '  %s: not found\n' "$module"
+    fi
+  done
+
+  section "Bluetooth service"
+  systemctl is-active bluetooth 2>/dev/null || true
+
+  section "Graphics and display brightness"
+  optional_command "Backlight devices" brightnessctl --list
+
+  section "Battery"
+  optional_command "Battery status" acpi -b
+
+  section "Audio services"
+  if command -v systemctl >/dev/null 2>&1; then
+    for service in pipewire wireplumber pipewire-pulse; do
+      printf '%s: ' "$service"
+      systemctl --user is-active "$service" 2>/dev/null || true
+    done
+  fi
+
+  section "Storage devices and mounts (read-only listing)"
+  optional_command "Physical block devices (no serial numbers)" lsblk -dn -o NAME,SIZE,MODEL,TRAN,TYPE
+  optional_command "Current mount table" findmnt -rn -o TARGET,SOURCE,FSTYPE
+
+  section "Relevant kernel messages"
+  if command -v journalctl >/dev/null 2>&1; then
+    journalctl -b -k --no-pager -o short-monotonic 2>/dev/null \
+      | grep -Ei 'mt7902|mt7921|mt76|mediatek|btusb|btmtk|bluetooth|amdgpu|firmware|ACPI BIOS Error|WLAN' \
+      | tail -n 100 || printf '[No matching kernel messages in this boot.]\n'
+  else
+    printf '[journalctl is unavailable.]\n'
+  fi
+
+  printf '\n========== End of report ==========\n'
+}
+
+if [[ -n "$SAVE_PATH" ]]; then
+  mkdir -p "$(dirname -- "$SAVE_PATH")"
+  render_report | tee "$SAVE_PATH"
+  printf '\nSaved locally to: %s\n' "$SAVE_PATH"
+else
+  render_report
+fi
