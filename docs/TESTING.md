@@ -41,7 +41,7 @@ To save a local report:
 
     aether diagnose --save
 
-The default saved report is placed in /tmp. The diagnostic output avoids SSIDs, IP/MAC addresses, passwords and device serial numbers. It is not uploaded anywhere. Review it before sharing, because hardware models and device names can still identify your configuration.
+The default saved report is placed in /tmp. The report is local and never uploaded. Filtered kernel messages receive best-effort redaction of common SSID, IP and MAC patterns, but this is not a guarantee that every identifier is removed. Review the report before sharing; hardware models and device names can still identify your configuration.
 
 ## Reference laptop test matrix
 
