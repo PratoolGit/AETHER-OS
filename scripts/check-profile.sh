@@ -22,6 +22,7 @@ for file in \
   profile/airootfs/etc/X11/xorg.conf.d/40-aether-touchpad.conf \
   profile/airootfs/etc/lightdm/lightdm-gtk-greeter.conf \
   profile/airootfs/usr/share/backgrounds/aether/aether-midnight.svg \
+  profile/airootfs/usr/share/applications/aether-diagnostics.desktop \
   profile/airootfs/usr/local/bin/aether \
   profile/airootfs/usr/local/bin/aether-diagnose \
   profile/airootfs/usr/local/bin/aether-live-user-setup \
@@ -82,6 +83,7 @@ grep -Fq 'value="whiskermenu"' "$panel"
 grep -Fq 'value="pulseaudio"' "$panel"
 grep -Fq 'adw-gtk3-dark' profile/airootfs/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
 grep -Fq 'Papirus-Dark' profile/airootfs/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+grep -Fq 'Exec=xfce4-terminal --hold --execute aether diagnose' profile/airootfs/usr/share/applications/aether-diagnostics.desktop
 grep -Fq 'Option "Tapping" "on"' profile/airootfs/etc/X11/xorg.conf.d/40-aether-touchpad.conf
 grep -Fq '[multilib]' profile/pacman.conf
 grep -Fq 'Include = /etc/pacman.d/mirrorlist' profile/pacman.conf
