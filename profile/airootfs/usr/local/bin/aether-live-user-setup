@@ -35,5 +35,9 @@ ln -sfn /usr/lib/systemd/system/bluetooth.service \
 ln -sfn /usr/lib/systemd/system/lightdm.service \
   /etc/systemd/system/display-manager.service
 
+# Boot the live desktop, not only the text-mode multi-user target.
+ln -sfn /usr/lib/systemd/system/graphical.target \
+  /etc/systemd/system/default.target
+
 # The setup hook is build-time only. Do not run it on later live-session updates.
 rm -f /etc/pacman.d/hooks/90-aether-live-setup.hook
