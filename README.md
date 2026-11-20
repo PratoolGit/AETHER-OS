@@ -2,7 +2,7 @@
 
 A lightweight, highly customizable Linux distribution focused on developer productivity and broad hardware support.
 
-> **Status:** Early alpha — the UEFI live ISO builds successfully and passes an automated QEMU boot smoke test. Real-laptop hardware testing is still pending.
+> **Status:** Early alpha — the first UEFI image passed a QEMU boot test. Alpha 0.2 adds the initial AETHER desktop layout, laptop utilities and build-time driver/firmware checks. Physical ASUS hardware validation is still required.
 
 ## Project goals
 
@@ -11,16 +11,18 @@ A lightweight, highly customizable Linux distribution focused on developer produ
 - Linux development support with optional runtimes and tools installed on demand.
 - Windows application compatibility through optional Wine/Bottles/Proton components.
 - A beginner-friendly command experience with familiar aliases and guided system tools, while retaining standard Linux commands.
-- Safe USB-first testing. Alpha 0.1 has no installer or persistent live storage and does not automatically mount internal Windows volumes.
+- Safe USB-first testing. The alpha has no installer or persistent live storage and does not automatically mount internal Windows volumes.
 
 ## Current alpha
 
-- Archiso-based x86_64 image profile.
-- XFCE desktop baseline selected for low-overhead benchmarking.
-- AMD graphics, Linux firmware, NetworkManager, Bluetooth and PipeWire.
+- Archiso-based x86_64 live image using the current Arch kernel and firmware packages.
+- AMD integrated graphics support with AMDGPU, Mesa and RADV.
+- Explicit MediaTek firmware and CI assertions for the MT7902 Wi-Fi PCI ID, Bluetooth USB ID and all three MT7902 firmware files.
+- NetworkManager, Blueman, PipeWire, laptop brightness/battery utilities and hardware inspection tools.
+- Dark AETHER appearance using Adwaita GTK 3 styling, Papirus icons, a custom midnight wallpaper, a searchable AETHER menu, top status panel and dock-style task switcher.
 - LightDM live session with a temporary AETHER user; automatic firstboot prompts are disabled and the graphical target is selected.
-- Friendly AETHER command helper and familiar shell aliases.
-- GitHub Actions build workflow.
+- The AETHER diagnose command produces a local hardware report. It does not upload reports or include SSIDs, IP/MAC addresses, passwords or device serial numbers.
+- GitHub Actions builds the ISO, verifies the installed package set and key hardware driver/firmware files, and boots the image in UEFI QEMU.
 
 The initial prototype currently uses UEFI systemd-boot because it is directly supported by Archiso. **Limine remains the intended bootloader** and requires a separately tested ISO integration step before the bootloader choice is finalized.
 
@@ -30,7 +32,9 @@ The initial prototype currently uses UEFI systemd-boot because it is directly su
 - AMD Ryzen 3
 - 8 GB RAM
 - AMD integrated graphics
-- MediaTek MT7902 Wi-Fi / Bluetooth (hardware validation required)
+- MediaTek MT7902 Wi-Fi / Bluetooth
+
+CI verifies that the shipped kernel advertises the expected MT7902 device IDs and that the firmware files are present. This is a stronger image-level check, not proof that Wi-Fi, Bluetooth, suspend or every laptop component works on the physical ASUS.
 
 ## Build locally
 
@@ -53,6 +57,8 @@ In a terminal, use the AETHER helper:
 - aether search TERM
 - aether info
 - aether network
+- aether diagnose — inspect hardware, kernel drivers, firmware, power, audio and mounted storage
+- aether diagnose --save — save a report under /tmp
 - aether setup developer
 - aether setup windows
 
@@ -60,11 +66,11 @@ Familiar aliases are also provided: cls, dir, copy, move, del, ipconfig and task
 
 ## Build with GitHub Actions
 
-Open the repository's Actions tab and run **Build AETHER OS ISO**, or push a change to the ISO profile. Run [#51](https://github.com/PratoolGit/AETHER-OS/actions/runs/44699574544) completed successfully on 20 November 2026: the ISO built, passed the installed-package safety check, and reached LightDM in a UEFI QEMU smoke test. The ISO and SHA-256 checksum are included in the workflow artifact.
+Open the repository's Actions tab and run **Build AETHER OS ISO**, or push a change to the ISO profile. The previous baseline run [#51](https://github.com/PratoolGit/AETHER-OS/actions/runs/44699574544) completed successfully on 20 November 2026 and reached LightDM in UEFI QEMU. The current workflow adds driver-ID and firmware assertions for the ASUS reference hardware; check the latest Actions run for the Alpha 0.2 ISO and checksum artifact.
 
 ## Safety
 
-AETHER OS is experimental. Test from a dedicated USB drive first. Alpha 0.1 is not an installer and has no disk-partitioning workflow. GVFS and UDisks2 are excluded from the live package set and checked after image construction, removing Thunar's normal removable-volume mounting integration. This is not block-device write protection. Do not manually mount or write to internal Windows partitions during testing. The current alpha is a live-session prototype, not an installer. No software can promise absolute protection against every firmware, hardware or user error.
+AETHER OS is experimental. Test from a dedicated USB drive first. The alpha is not an installer and has no disk-partitioning workflow. GVFS and UDisks2 are excluded from the live package set and checked after image construction, removing Thunar's normal removable-volume mounting integration. This is not block-device write protection. Do not manually mount or write to internal Windows partitions during testing. The current image is a non-persistent live-session prototype. No software can promise absolute protection against every firmware, hardware or user error.
 
 ## Project documents
 
