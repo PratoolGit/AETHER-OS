@@ -99,7 +99,7 @@ jobs:
               echo "PASS: built kernel includes MT7902 Wi-Fi/Bluetooth IDs and firmware."
               echo "PASS: built rootfs includes the AMDGPU driver and firmware."
               printf "Kernel build: "
-              find "$modules_dir" -mindepth 1 -maxdepth 1 -type d -printf "%f\\n" | head -n 1
+              find "$modules_dir" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | head -n 1
 
               cd /workspace/out
               sha256sum *.iso > SHA256SUMS
