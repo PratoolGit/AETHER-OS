@@ -46,7 +46,8 @@ The default saved report is placed in /tmp. The diagnostic output avoids SSIDs, 
 ## Reference laptop test matrix
 
 - **Boot:** UEFI boot from USB; confirm LightDM and the configured XFCE desktop appear.
-- **AMD graphics:** inspect lspci -nnk, confirm the amdgpu driver is bound, test the internal display, external display and video playback.
+- **AMD graphics:** inspect lspci -nnk, confirm the amdgpu driver is bound, review glxinfo -B and vulkaninfo --summary for the actual renderer/device, test the internal display, external display and video playback. An llvmpipe renderer indicates software rendering rather than AMD hardware acceleration.
+- **Touchpad:** inspect libinput list-devices, test tap-to-click, disable-while-typing, two-finger scrolling and physical click.
 - **MT7902 Wi-Fi:** check rfkill list, nmcli device status, lspci -nnk and kernel messages; connect to a test network only after confirming the adapter appears.
 - **MT7902 Bluetooth:** check lsusb, systemctl is-active bluetooth and Blueman; test discovery and a known peripheral separately from Wi-Fi.
 - **Laptop controls:** test brightness keys, battery reporting, volume keys, microphone, touchpad, two-finger scrolling and suspend/resume.
