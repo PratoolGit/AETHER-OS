@@ -35,7 +35,8 @@
 
 ## Alpha 0.4 — compatibility and developer workflow
 
-- [ ] Add optional Windows compatibility profiles using Wine/Bottles and Steam/Proton.
+- [x] Enable multilib repository without installing multilib runtime packages in the base image.
+- [x] Add an optional Wine/Winetricks/Bottles setup path; application-level compatibility testing remains open.
 - [ ] Add guided installation of language runtimes, Git tools and developer applications.
 - [x] Keep familiar command aliases and beginner-friendly command helpers.
 - [x] Preserve standard Linux commands and package-management behavior.
