@@ -31,7 +31,7 @@ The live user has passwordless sudo for testing convenience. This is acceptable 
 
 ## Diagnostics
 
-The aether diagnose command prints a local report containing CPU, kernel, memory, relevant PCI/USB devices, radio state, kernel module availability, power/brightness, audio services, storage mounts and filtered hardware-related kernel messages. It intentionally omits Wi-Fi names, IP/MAC addresses, passwords and device serial numbers; it never uploads the report. Use aether diagnose --save to save a local copy in /tmp.
+The aether diagnose command prints a local report containing CPU, kernel, memory, relevant PCI/USB devices, radio state, kernel module availability, OpenGL/Vulkan renderer information, display modes, input devices, power/brightness, audio services, storage mounts and filtered hardware-related kernel messages. It performs best-effort redaction of common IP, MAC and SSID patterns in the kernel log section. Review reports before sharing; they are never uploaded. Use aether diagnose --save to save a local copy in /tmp.
 
 ## Memory budget
 
