@@ -92,8 +92,14 @@ render_report() {
   section "Bluetooth service"
   systemctl is-active bluetooth 2>/dev/null || true
 
-  section "Graphics and display brightness"
+  section "Graphics acceleration and display"
+  optional_command "OpenGL renderer and driver" glxinfo -B
+  optional_command "Vulkan devices" vulkaninfo --summary
+  optional_command "Connected displays and modes" xrandr --current
   optional_command "Backlight devices" brightnessctl --list
+
+  section "Touchpad and input devices"
+  optional_command "Detected libinput devices" libinput list-devices
 
   section "Battery"
   optional_command "Battery status" acpi -b
