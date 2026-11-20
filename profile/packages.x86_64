@@ -77,6 +77,10 @@ lm_sensors
 pciutils
 usbutils
 rfkill
+mesa-utils
+vulkan-tools
+xorg-xrandr
+libinput-tools
 
 # Memory pressure protection (swap stays in RAM; no disk swap is configured)
 zram-generator
