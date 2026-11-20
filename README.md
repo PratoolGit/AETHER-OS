@@ -9,6 +9,7 @@ A lightweight, highly customizable Linux distribution focused on developer produ
 - Target **600–800 MB idle RAM** on the reference laptop, measured under a documented test profile. This is a goal, not a guarantee.
 - A highly configurable desktop: dock, panel, launcher, themes, window layouts, gestures and appearance controls.
 - Linux development support with optional runtimes and tools installed on demand.
+- Optional Windows app support through Wine, Winetricks and Bottles, with 32-bit compatibility repositories enabled but no 32-bit stack installed by default.
 - Windows application compatibility through optional Wine/Bottles/Proton components.
 - A beginner-friendly command experience with familiar aliases and guided system tools, while retaining standard Linux commands.
 - Safe USB-first testing. The alpha has no installer or persistent live storage and does not automatically mount internal Windows volumes.
@@ -60,7 +61,7 @@ In a terminal, use the AETHER helper:
 - aether diagnose — inspect hardware, kernel drivers, firmware, power, audio and mounted storage
 - aether diagnose --save — save a report under /tmp
 - aether setup developer
-- aether setup windows
+- aether setup windows — install Wine, Winetricks and Bottles (requires network access)
 
 Familiar aliases are also provided: cls, dir, copy, move, del, ipconfig and tasklist. These are convenience shortcuts; standard Linux commands remain available.
 
