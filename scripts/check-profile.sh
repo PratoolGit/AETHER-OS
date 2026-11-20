@@ -38,7 +38,7 @@ for package in base linux linux-firmware linux-firmware-mediatek linux-firmware-
                amd-ucode mkinitcpio mkinitcpio-archiso networkmanager wpa_supplicant \
                bluez blueman lightdm zram-generator mesa vulkan-radeon \
                xfce4-whiskermenu-plugin xfce4-docklike-plugin xfce4-pulseaudio-plugin \
-               adw-gtk-theme papirus-icon-theme brightnessctl acpi pciutils usbutils
+               adw-gtk-theme papirus-icon-theme brightnessctl acpi pciutils usbutils rfkill
 do
   if ! grep -Fxq "$package" profile/packages.x86_64; then
     echo "Required package is missing from packages.x86_64: $package" >&2
