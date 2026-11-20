@@ -62,9 +62,9 @@ trap cleanup EXIT
 
 elapsed=0
 while (( elapsed < BOOT_TIMEOUT )); do
-  if grep -Fq "Started Light Display Manager" "$SERIAL_LOG" 2>/dev/null; then
+  if grep -aEq "Started .*Light Display Manager" "$SERIAL_LOG" 2>/dev/null; then
     echo "PASS: AETHER OS reached the LightDM service in UEFI QEMU ($ACCEL)."
-    grep -F "Started Light Display Manager" "$SERIAL_LOG" | tail -n 1
+    grep -aE "Started .*Light Display Manager" "$SERIAL_LOG" | tail -n 1
     exit 0
   fi
 
