@@ -6,7 +6,6 @@
     <value type="int" value="1"/>
     <value type="int" value="2"/>
   </property>
-
   <property name="panel-1" type="empty">
     <property name="position" type="string" value="p=6;x=0;y=0"/>
     <property name="length" type="uint" value="100"/>
@@ -27,10 +26,8 @@
       <value type="int" value="6"/>
       <value type="int" value="7"/>
       <value type="int" value="8"/>
-      <value type="int" value="9"/>
     </property>
   </property>
-
   <property name="panel-2" type="empty">
     <property name="position" type="string" value="p=10;x=0;y=0"/>
     <property name="length" type="uint" value="70"/>
@@ -45,12 +42,11 @@
     <property name="enter-opacity" type="uint" value="96"/>
     <property name="leave-opacity" type="uint" value="88"/>
     <property name="plugin-ids" type="array">
+      <value type="int" value="9"/>
       <value type="int" value="10"/>
       <value type="int" value="11"/>
-      <value type="int" value="12"/>
     </property>
   </property>
-
   <property name="plugins" type="empty">
     <property name="plugin-1" type="string" value="whiskermenu"/>
     <property name="plugin-1/button-title" type="string" value="AETHER"/>
@@ -84,10 +80,9 @@
     <property name="plugin-8/ask-confirmation" type="bool" value="true"/>
 
     <property name="plugin-9" type="string" value="showdesktop"/>
-    <property name="plugin-10" type="string" value="showdesktop"/>
-    <property name="plugin-11" type="string" value="separator"/>
-    <property name="plugin-11/expand" type="bool" value="false"/>
-    <property name="plugin-11/style" type="uint" value="1"/>
-    <property name="plugin-12" type="string" value="docklike"/>
+    <property name="plugin-10" type="string" value="separator"/>
+    <property name="plugin-10/expand" type="bool" value="false"/>
+    <property name="plugin-10/style" type="uint" value="1"/>
+    <property name="plugin-11" type="string" value="docklike"/>
   </property>
 </channel>
