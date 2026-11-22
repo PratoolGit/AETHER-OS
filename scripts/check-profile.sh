@@ -9,6 +9,10 @@ required_files=(
   profile/airootfs/etc/mkinitcpio.conf.d/archiso.conf
   profile/airootfs/etc/pacman.d/hooks/90-aether-live-setup.hook
   profile/airootfs/etc/systemd/zram-generator.conf
+  profile/airootfs/etc/systemd/system/aether-live-user.service
+  profile/airootfs/etc/systemd/system/default.target
+  profile/airootfs/etc/systemd/system/graphical.target.d/10-aether.conf
+  profile/airootfs/etc/systemd/system/lightdm.service.d/10-aether.conf
   profile/airootfs/etc/profile.d/aether-aliases.sh profile/airootfs/etc/skel/.bashrc
   profile/airootfs/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
   profile/airootfs/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
@@ -62,16 +66,18 @@ for file in "${old_xdg_configs[@]}"; do
   [[ ! -e "$file" ]] || { echo "Package-conflicting XFCE override remains: $file" >&2; exit 1; }
 done
 
-# User creation and service activation happen once through the build-time pacman hook.
-legacy_units=(
-  profile/airootfs/etc/systemd/system/aether-live-user.service
-  profile/airootfs/etc/systemd/system/default.target
+# The build-time hook prepares the account; runtime units enforce boot ordering.
+live_service="profile/airootfs/etc/systemd/system/aether-live-user.service"
+grep -Fq 'Before=lightdm.service' "$live_service"
+grep -Fq 'ExecStart=/usr/local/bin/aether-live-user-setup' "$live_service"
+grep -Fq 'Type=oneshot' "$live_service"
+grep -Fq 'Requires=graphical.target' profile/airootfs/etc/systemd/system/default.target
+grep -Fq 'Wants=NetworkManager.service bluetooth.service lightdm.service aether-live-user.service' \
   profile/airootfs/etc/systemd/system/graphical.target.d/10-aether.conf
+grep -Fq 'Requires=aether-live-user.service' \
   profile/airootfs/etc/systemd/system/lightdm.service.d/10-aether.conf
-)
-for file in "${legacy_units[@]}"; do
-  [[ ! -e "$file" ]] || { echo "Redundant boot-time live-user unit remains: $file" >&2; exit 1; }
-done
+grep -Fq 'After=aether-live-user.service' \
+  profile/airootfs/etc/systemd/system/lightdm.service.d/10-aether.conf
 
 if grep -Eq '(^|[[:space:]])memdisk([[:space:]]|$)' profile/airootfs/etc/mkinitcpio.conf.d/archiso.conf; then
   echo "The Syslinux memdisk initramfs hook is not used in this UEFI build." >&2; exit 1
