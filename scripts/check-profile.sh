@@ -21,7 +21,7 @@ required_files=(
   profile/airootfs/usr/share/applications/aether-diagnostics.desktop
   profile/airootfs/usr/local/bin/aether profile/airootfs/usr/local/bin/aether-diagnose
   profile/airootfs/usr/local/bin/aether-live-user-setup
-  scripts/build-iso.sh scripts/check-iso.sh scripts/vm-smoke-test.sh
+  scripts/build-iso.sh scripts/check-iso.sh scripts/vm-smoke-test.sh scripts/check-kernel-modules.py
 )
 for file in "${required_files[@]}"; do
   [[ -f "$file" ]] || { echo "Missing required AETHER profile file: $file" >&2; exit 1; }
@@ -129,4 +129,5 @@ bash -n scripts/vm-smoke-test.sh
 bash -n profile/airootfs/usr/local/bin/aether
 bash -n profile/airootfs/usr/local/bin/aether-diagnose
 bash -n profile/airootfs/usr/local/bin/aether-live-user-setup
+python3 -m py_compile scripts/check-kernel-modules.py
 echo "AETHER profile checks passed."
