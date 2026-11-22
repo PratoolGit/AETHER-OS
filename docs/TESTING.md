@@ -29,7 +29,7 @@ These checks prove that the image contains the expected driver matches and firmw
 - The profile omits GVFS, UDisks2 and Thunar's removable-volume manager. The build workflow checks the installed package database to ensure UDisks2 was not pulled in as a transitive dependency. This removes Thunar's usual GUI volume-mount workflow, but it is not block-device write protection.
 - Do not manually mount or write to internal Windows partitions. Do not create swap, persistence, logs or application data on the Windows disk.
 - Keep Secure Boot disabled for the initial prototype; the image is not signed for Secure Boot.
-- Alpha 0.2 has no persistent live storage. The live account is created during ISO construction by a one-time package hook. It is a disposable aether account with passwordless sudo for the live session; do not use it as a secure personal account.
+- Alpha 0.2 has no persistent live storage. The live account is created during ISO construction by a one-time package hook and revalidated by an idempotent systemd one-shot service at boot before LightDM starts. It is a disposable aether account with passwordless sudo for the live session; do not use it as a secure personal account.
 
 ## Quick hardware report
 
