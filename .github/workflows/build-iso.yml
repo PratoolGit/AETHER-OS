@@ -78,47 +78,14 @@ jobs:
                 exit 1
               fi
 
-              # MT7902 Bluetooth support is stored in btusb internal quirks_table,
-              # not necessarily exported to modules.alias. Inspect the compiled modules.
+              # Validate the USB quirk record and MT7902 firmware selection in compiled modules.
               btusb_module=$(find "$modules_dir" -type f -name "btusb.ko*" -print -quit)
               btmtk_module=$(find "$modules_dir" -type f -name "btmtk.ko*" -print -quit)
               if [[ -z "$btusb_module" || -z "$btmtk_module" ]]; then
                 echo "ERROR: btusb or btmtk kernel module is missing." >&2
                 exit 1
               fi
-
-              python3 - "$btusb_module" "$btmtk_module" <<PY
-              import subprocess
-              import sys
-
-              def module_bytes(path):
-                  if path.endswith(".zst"):
-                      command = ["zstd", "-q", "-d", "-c", path]
-                  elif path.endswith(".xz"):
-                      command = ["xz", "-d", "-c", path]
-                  else:
-                      command = ["cat", path]
-                  return subprocess.run(command, check=True, stdout=subprocess.PIPE).stdout
-
-              btusb = module_bytes(sys.argv[1])
-              btmtk = module_bytes(sys.argv[2])
-
-              # USB_DEVICE(0x13d3, 0x3579): match flags + vendor + product,
-              # encoded in the compiled struct usb_device_id (little-endian).
-              if bytes.fromhex("03 00 d3 13 79 35") not in btusb:
-                  raise SystemExit("ERROR: compiled btusb module lacks the MT7902 13d3:3579 quirk-table entry.")
-
-              # The upstream MediaTek helper formats the MT79xx firmware path from
-              # the controller ID; check its formatter and the compiled 0x7902 case.
-              firmware_pattern = b"mediatek/BT_RAM_CODE_MT%04x_1_%x_hdr.bin"
-              if firmware_pattern not in btmtk:
-                  raise SystemExit("ERROR: compiled btmtk module lacks the MT79xx firmware path formatter.")
-              if bytes.fromhex("02 79 00 00") not in btmtk:
-                  raise SystemExit("ERROR: compiled btmtk module lacks the MT7902 controller ID.")
-
-              print("PASS: compiled btusb module contains MT7902 USB ID 13d3:3579.")
-              print("PASS: compiled btmtk module includes MT7902 firmware-selection support.")
-              PY
+              python3 /workspace/scripts/check-kernel-modules.py "$btusb_module" "$btmtk_module"
 
               for firmware in \
                 mediatek/WIFI_MT7902_patch_mcu_1_1_hdr.bin.zst \
