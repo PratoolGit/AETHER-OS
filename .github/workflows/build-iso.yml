@@ -78,7 +78,7 @@ jobs:
                 exit 1
               fi
 
-              # MT7902 Bluetooth support is stored in btusb's internal quirks_table,
+              # MT7902 Bluetooth support is stored in btusb internal quirks_table,
               # not necessarily exported to modules.alias. Inspect the compiled modules.
               btusb_module=$(find "$modules_dir" -type f -name "btusb.ko*" -print -quit)
               btmtk_module=$(find "$modules_dir" -type f -name "btmtk.ko*" -print -quit)
