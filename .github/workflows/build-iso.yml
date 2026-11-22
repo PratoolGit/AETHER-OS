@@ -38,7 +38,7 @@ jobs:
             archlinux:latest \
             bash -Eeuo pipefail -c '
               pacman -Syu --noconfirm
-              pacman -S --needed --noconfirm archiso
+              pacman -S --needed --noconfirm archiso python zstd
               mkarchiso -v -w /workspace/.work -o /workspace/out /workspace/profile
 
               # Verify the built root filesystem, not just requested package names.
