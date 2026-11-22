@@ -87,7 +87,7 @@ jobs:
                 exit 1
               fi
 
-              python3 - "$btusb_module" "$btmtk_module" <<'PY'
+              python3 - "$btusb_module" "$btmtk_module" <<PY
               import subprocess
               import sys
 
