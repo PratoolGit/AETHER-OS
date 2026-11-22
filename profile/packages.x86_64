@@ -78,7 +78,6 @@ acpi
 lm_sensors
 pciutils
 usbutils
-rfkill
 mesa-utils
 vulkan-tools
 xorg-xrandr
