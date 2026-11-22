@@ -108,13 +108,16 @@ jobs:
               if bytes.fromhex("03 00 d3 13 79 35") not in btusb:
                   raise SystemExit("ERROR: compiled btusb module lacks the MT7902 13d3:3579 quirk-table entry.")
 
-              # Confirm that the MediaTek transport knows the MT7902 firmware name.
-              firmware_ref = b"mediatek/BT_RAM_CODE_MT7902_1_1_hdr.bin"
-              if firmware_ref not in btmtk:
-                  raise SystemExit("ERROR: compiled btmtk module lacks the MT7902 firmware reference.")
+              # The upstream MediaTek helper formats the MT79xx firmware path from
+              # the controller ID; check its formatter and the compiled 0x7902 case.
+              firmware_pattern = b"mediatek/BT_RAM_CODE_MT%04x_1_%x_hdr.bin"
+              if firmware_pattern not in btmtk:
+                  raise SystemExit("ERROR: compiled btmtk module lacks the MT79xx firmware path formatter.")
+              if bytes.fromhex("02 79 00 00") not in btmtk:
+                  raise SystemExit("ERROR: compiled btmtk module lacks the MT7902 controller ID.")
 
               print("PASS: compiled btusb module contains MT7902 USB ID 13d3:3579.")
-              print("PASS: compiled btmtk module references the MT7902 Bluetooth firmware.")
+              print("PASS: compiled btmtk module includes MT7902 firmware-selection support.")
               PY
 
               for firmware in \
