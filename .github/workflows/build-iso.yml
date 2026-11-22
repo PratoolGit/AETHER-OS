@@ -78,11 +78,44 @@ jobs:
                 exit 1
               fi
 
-              # ASUS reference laptop: MediaTek MT7902 Bluetooth USB interface (13d3:3579).
-              if ! grep -Eiq "usb:v13D3p3579.*btusb" "${alias_files[@]}"; then
-                echo "ERROR: MT7902 Bluetooth alias is absent from the built kernel." >&2
+              # MT7902 Bluetooth support is stored in btusb's internal quirks_table,
+              # not necessarily exported to modules.alias. Inspect the compiled modules.
+              btusb_module=$(find "$modules_dir" -type f -name "btusb.ko*" -print -quit)
+              btmtk_module=$(find "$modules_dir" -type f -name "btmtk.ko*" -print -quit)
+              if [[ -z "$btusb_module" || -z "$btmtk_module" ]]; then
+                echo "ERROR: btusb or btmtk kernel module is missing." >&2
                 exit 1
               fi
+
+              python3 - "$btusb_module" "$btmtk_module" <<'PY'
+              import subprocess
+              import sys
+
+              def module_bytes(path):
+                  if path.endswith(".zst"):
+                      command = ["zstd", "-q", "-d", "-c", path]
+                  elif path.endswith(".xz"):
+                      command = ["xz", "-d", "-c", path]
+                  else:
+                      command = ["cat", path]
+                  return subprocess.run(command, check=True, stdout=subprocess.PIPE).stdout
+
+              btusb = module_bytes(sys.argv[1])
+              btmtk = module_bytes(sys.argv[2])
+
+              # USB_DEVICE(0x13d3, 0x3579): match flags + vendor + product,
+              # encoded in the compiled struct usb_device_id (little-endian).
+              if bytes.fromhex("03 00 d3 13 79 35") not in btusb:
+                  raise SystemExit("ERROR: compiled btusb module lacks the MT7902 13d3:3579 quirk-table entry.")
+
+              # Confirm that the MediaTek transport knows the MT7902 firmware name.
+              firmware_ref = b"mediatek/BT_RAM_CODE_MT7902_1_1_hdr.bin"
+              if firmware_ref not in btmtk:
+                  raise SystemExit("ERROR: compiled btmtk module lacks the MT7902 firmware reference.")
+
+              print("PASS: compiled btusb module contains MT7902 USB ID 13d3:3579.")
+              print("PASS: compiled btmtk module references the MT7902 Bluetooth firmware.")
+              PY
 
               for firmware in \
                 mediatek/WIFI_MT7902_patch_mcu_1_1_hdr.bin.zst \
