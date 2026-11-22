@@ -60,15 +60,10 @@ def main() -> int:
         )
         return 1
 
-    # The MT7902 chip ID is 0x7902; compilers may encode the immediate as
-    # either a 16-bit or 32-bit little-endian value.
-    if b"\x02\x79" not in btmtk:
-        print(
-            "ERROR: compiled btmtk module lacks the MT7902 controller ID.",
-            file=sys.stderr,
-        )
-        return 1
-
+    # The controller ID is read from hardware at runtime. Validate the
+    # generic firmware-path formatter and the exact packaged MT7902 firmware
+    # files in the ISO workflow rather than a compiler-specific immediate.
+ 
     print("PASS: compiled btusb module contains MT7902 USB ID 13d3:3579.")
     print("PASS: compiled btmtk module includes MT7902 firmware-selection support.")
     return 0
